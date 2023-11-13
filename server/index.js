@@ -5,7 +5,7 @@ const cors = require("cors");
 const axios = require("axios");
 
 const authRouter = require("./routes/auth");
-const productRouter = require("./routes/product");
+// const productRouter = require("./routes/product");
 
 const connectDB = async () => {
     try {
@@ -23,7 +23,7 @@ app.use(express.json());
 app.use(cors())
 
 app.use("/api/auth", authRouter, (req, res) => {});
-app.use("/api/posts", productRouter);
+// app.use("/api/posts", productRouter);
 
 const PORT = process.env.PORT || 1203;
 
