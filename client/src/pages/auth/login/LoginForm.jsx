@@ -1,9 +1,12 @@
 import React from 'react'
 import { Button, Form, Input } from 'antd'
+import { useDispatch } from 'react-redux'
+import { login } from '../../../redux/slice/login.slice'
+import { Navigate, useNavigate } from 'react-router-dom'
 
 const layout = {
   labelCol: {
-    span: 8,
+    span: 10,
   },
   wrapperCol: {
     span: 16,
@@ -12,16 +15,21 @@ const layout = {
 
 const tailLayout = {
   wrapperCol: {
-    offset: 8,
+    offset: 10,
     span: 16,
   },
 }
 
-const LoginForm = () => {
+const LoginForm = ({ setTab }) => {
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+
+  const handleLogin = (data) => {
+    dispatch(login(data))
+  }
   return (
     <div>
-      login form
-      <Form {...layout}>
+      <Form {...layout} onFinish={handleLogin}>
         <Form.Item
           name={'username'}
           label='Username'
@@ -40,7 +48,7 @@ const LoginForm = () => {
           rules={[
             {
               required: true,
-              essage: 'This field is required',
+              message: 'This field is required',
             },
           ]}
         >
@@ -52,6 +60,7 @@ const LoginForm = () => {
           </Button>
         </Form.Item>
       </Form>
+      <span onClick={() =>       navigate('/register')}>Register</span>
     </div>
   )
 }
