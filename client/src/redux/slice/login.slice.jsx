@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import tbAuthController from '../api/tb.auth.controler'
+import tbAuthController from '../api/tb.auth.controller'
 
 import Cookies from 'js-cookie'
 
@@ -12,7 +12,6 @@ export const initialState = {
 export const loadUser = createAsyncThunk('loadUser', async () => {
   try {
     const response = await tbAuthController.getUser()
-    console.log(response)
     return response.data.user
   } catch (error) {
     Cookies.remove('token')
@@ -23,7 +22,6 @@ export const loadUser = createAsyncThunk('loadUser', async () => {
 export const login = createAsyncThunk('login', async ({ username, password }, { dispatch }) => {
   try {
     const response = await tbAuthController.login(username, password)
-    console.log(response.data)
     const accessToken = response.data.accessToken
     Cookies.set('token', accessToken, { expires: 7 })
     await dispatch(loadUser()).unwrap()

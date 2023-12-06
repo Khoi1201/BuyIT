@@ -33,7 +33,7 @@ router.post('/', verifyToken, async (req, res) => {
 })
 
 // @route GET api/products
-// @desc Gett products
+// @desc Get products
 // @access Private
 
 router.get('/', verifyToken, async (req, res) => {
