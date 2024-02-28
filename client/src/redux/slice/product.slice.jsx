@@ -10,7 +10,7 @@ export const initialState = {
 
 export const getAllProducts = createAsyncThunk('getAllProducts', async () => {
   try {
-    const response = await tbProductController.getAllProducts()
+    const response = await tbProductController.getAllProducts() // token based
     return response.data.products
   } catch (error) {
     console.log(error)
@@ -20,6 +20,15 @@ export const getAllProducts = createAsyncThunk('getAllProducts', async () => {
 export const addProduct = createAsyncThunk('addProduct', async (data) => {
   try {
     const response = await tbProductController.addProduct(data)
+    return response.data
+  } catch (error) {
+    console.log(error)
+  }
+})
+
+export const deleteProduct = createAsyncThunk('deleteProduct', async (id) => {
+  try {
+    const response = await tbProductController.deleteProduct(id)
     return response.data
   } catch (error) {
     console.log(error)
@@ -44,14 +53,25 @@ export const productSlice = createSlice({
     })
 
     //add product
-    builder.addCase(addProduct.pending, (state)=>{
-      state.addProductStatus='loading'
+    builder.addCase(addProduct.pending, (state) => {
+      state.addProductStatus = 'loading'
     })
-    builder.addCase(addProduct.fulfilled, (state)=>{
-      state.addProductStatus='success'
+    builder.addCase(addProduct.fulfilled, (state) => {
+      state.addProductStatus = 'success'
     })
-    builder.addCase(addProduct.rejected, (state)=>{
-      state.addProductStatus='failed'
+    builder.addCase(addProduct.rejected, (state) => {
+      state.addProductStatus = 'failed'
+    })
+
+    //delete product
+    builder.addCase(deleteProduct.pending, (state) => {
+      state.deleteProductStatus = 'loading'
+    })
+    builder.addCase(deleteProduct.fulfilled, (state) => {
+      state.deleteProductStatus = 'success'
+    })
+    builder.addCase(deleteProduct.rejected, (state) => {
+      state.deleteProductStatus = 'failed'
     })
   },
 })

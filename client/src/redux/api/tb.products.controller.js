@@ -10,6 +10,11 @@ const tbProductController = {
     const url = '/products'
     return axiosCustom.post(url, { payload })
   },
+
+  deleteProduct(id) {
+    const url = '/products'
+    return axiosCustom.delete(url + `/${id}`)
+  },
 }
 
 export default tbProductController

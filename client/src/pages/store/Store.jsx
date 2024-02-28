@@ -1,8 +1,13 @@
-import { Button, Card, Flex, Form, Image, Input, Modal, Typography } from 'antd'
-import { PlusCircleOutlined } from '@ant-design/icons'
+import { Button, Card, Flex, Form, Image, Input, Modal, Popconfirm, Typography } from 'antd'
+import {
+  DeleteOutlined,
+  PlusCircleOutlined,
+  QuestionCircleOutlined,
+  SettingOutlined,
+} from '@ant-design/icons'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { addProduct, getAllProducts } from '../../redux/slice/product.slice'
+import { addProduct, deleteProduct, getAllProducts } from '../../redux/slice/product.slice'
 import Meta from 'antd/es/card/Meta'
 
 const Store = ({ setSelectTab }) => {
@@ -33,6 +38,11 @@ const Store = ({ setSelectTab }) => {
     setShowAddWindow(false)
   }
 
+  const handleDelete = async (id) => {
+    await dispatch(deleteProduct(id))
+    dispatch(getAllProducts())
+  }
+
   useEffect(() => {
     setSelectTab('store')
   }, [])
@@ -41,7 +51,7 @@ const Store = ({ setSelectTab }) => {
   }, [addProduct])
 
   return (
-    <div>
+    <div style={products ? {} : { height: '100vh' }}>
       <Modal
         open={showAddWindow}
         onCancel={handleCancel}
@@ -85,15 +95,37 @@ const Store = ({ setSelectTab }) => {
         {products?.map((product) => {
           return (
             <Card
+              key={product._id}
               id={product._id}
               cover={
                 <Image
-                  style={{ width: '100%', height: 300, objectFit: 'cover' }}
+                  style={{ width: '100%', height: 250, objectFit: 'cover' }}
                   alt='cover'
                   src={product.url}
                 />
               }
               style={{ height: 400, width: 300 }}
+              actions={[
+                <SettingOutlined key='setting' />,
+                <Popconfirm
+                  title='Delete item'
+                  description='Are you sure to delete this product?'
+                  onConfirm={() => handleDelete(product._id)}
+                  okText='Yes'
+                  okType={'danger'}
+                  cancelText='No'
+                  icon={
+                    <QuestionCircleOutlined
+                      style={{
+                        color: 'red',
+                      }}
+                    />
+                  }
+                  placement='topRight'
+                >
+                  <DeleteOutlined key='delete' />
+                </Popconfirm>,
+              ]}
             >
               <Meta title={product.title} description={product.description} />
               <span>Price: {product.price} $</span>
