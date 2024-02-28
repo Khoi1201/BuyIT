@@ -11,6 +11,11 @@ const tbProductController = {
     return axiosCustom.post(url, { payload })
   },
 
+  updateProduct(payload) {
+    const url = 'products'
+    return axiosCustom.put(url + `/${payload.id}`, { payload })
+  },
+
   deleteProduct(id) {
     const url = '/products'
     return axiosCustom.delete(url + `/${id}`)

@@ -12,6 +12,10 @@ const NotificationBar = () => {
 
   const addProdcutStatus = useSelector((state) => state.product.addProductStatus)
 
+  const updateProductStatus = useSelector((state) => state.product.updateProductStatus)
+
+  const deleteProductStatus = useSelector((state) => state.product.deleteProductStatus)
+
   const notifyError = (content) => {
     return notification.error({
       placement: 'topRight',
@@ -46,7 +50,17 @@ const NotificationBar = () => {
   useEffect(() => {
     addProdcutStatus === 'success' && notifySuccess('Add Product Successfully')
     addProdcutStatus === 'failed' && notifyError('Add Product Failed')
-  })
+  }, [addProdcutStatus])
+
+  useEffect(() => {
+    deleteProductStatus === 'success' && notifySuccess('Delete Product Successfully')
+    deleteProductStatus === 'failed' && notifyError('Delete Product Failed')
+  }, [deleteProductStatus])
+
+  useEffect(() => {
+    updateProductStatus === 'success' && notifySuccess('Product Updated')
+    updateProductStatus === 'failed' && notifyError('Failed To Update Product')
+  }, [updateProductStatus])
 }
 
 export default NotificationBar

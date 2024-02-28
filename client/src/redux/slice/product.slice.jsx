@@ -26,6 +26,15 @@ export const addProduct = createAsyncThunk('addProduct', async (data) => {
   }
 })
 
+export const updateProduct = createAsyncThunk('updateProduct', async (data) => {
+  try {
+    const response = await tbProductController.updateProduct(data)
+    return response.data
+  } catch (error) {
+    console.log(error)
+  }
+})
+
 export const deleteProduct = createAsyncThunk('deleteProduct', async (id) => {
   try {
     const response = await tbProductController.deleteProduct(id)
@@ -61,6 +70,17 @@ export const productSlice = createSlice({
     })
     builder.addCase(addProduct.rejected, (state) => {
       state.addProductStatus = 'failed'
+    })
+
+    //update product
+    builder.addCase(updateProduct.pending, (state) => {
+      state.updateProductStatus = 'loading'
+    })
+    builder.addCase(updateProduct.fulfilled, (state) => {
+      state.updateProductStatus = 'success'
+    })
+    builder.addCase(updateProduct.rejected, (state) => {
+      state.updateProductStatus = 'failed'
     })
 
     //delete product

@@ -1,22 +1,27 @@
 import { Button, Form, Input, InputNumber, Modal } from 'antd'
 import React from 'react'
 
-const ModalAddProduct = ({ showAddWindow, handleCancel, handleSubmit, form }) => {
+const ModalUpdateProduct = ({
+  showUpdateWindow,
+  handleCancelUpdate,
+  handleSubmitUpdate,
+  formUpdate,
+}) => {
   return (
     <Modal
-      open={showAddWindow}
-      onCancel={handleCancel}
+      open={showUpdateWindow}
+      onCancel={handleCancelUpdate}
       footer={[
-        <Button key='cancel' onClick={handleCancel}>
+        <Button key='cancel' onClick={handleCancelUpdate}>
           Cancel
         </Button>,
-        <Button key='submit' type='primary' onClick={handleSubmit}>
+        <Button key='submit' type='primary' onClick={handleSubmitUpdate}>
           Submit
         </Button>,
       ]}
     >
       <Form
-        form={form}
+        form={formUpdate}
         labelCol={{
           span: 8,
         }}
@@ -30,7 +35,7 @@ const ModalAddProduct = ({ showAddWindow, handleCancel, handleSubmit, form }) =>
         <Form.Item label='Name of product' name='title' required>
           <Input />
         </Form.Item>
-        <Form.Item label='Price' name='price' required initialValue={1}>
+        <Form.Item label='Price' name='price' required >
           <InputNumber addonAfter='$' min={1} max={999} />
         </Form.Item>
         <Form.Item label='Description' name='description' initialValue={''}>
@@ -44,4 +49,4 @@ const ModalAddProduct = ({ showAddWindow, handleCancel, handleSubmit, form }) =>
   )
 }
 
-export default ModalAddProduct
+export default ModalUpdateProduct
