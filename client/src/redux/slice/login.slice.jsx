@@ -48,7 +48,7 @@ export const authenticationSlice = createSlice({
       state.loadStatus = 'loading'
     })
     builder.addCase(loadUser.fulfilled, (state, action) => {
-      state.loadStatus = 'idle'
+      state.loadStatus = 'success'
       state.user = action.payload
       state.authenticated = true
     })
@@ -63,7 +63,7 @@ export const authenticationSlice = createSlice({
       state.loginStatus = 'loading'
     })
     builder.addCase(login.fulfilled, (state, action) => {
-      state.loginStatus = 'idle'
+      state.loginStatus = 'success'
     })
     builder.addCase(login.rejected, (state) => {
       state.loginStatus = 'failed'

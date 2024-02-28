@@ -23,9 +23,9 @@ const app = express()
 app.use(express.json())
 app.use(cors())
 
-app.use('/api/auth', authRouter, (req, res) => {})
-// app.use('/api/user', userRouter)
+app.use('/api/auth', authRouter)
 app.use("/api/products", productRouter);
+// app.use('/api/user', userRouter)
 
 const PORT = process.env.PORT || 1203
 

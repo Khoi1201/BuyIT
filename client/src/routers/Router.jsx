@@ -8,6 +8,7 @@ import { useDispatch } from 'react-redux'
 import { loadUser } from '../redux/slice/login.slice'
 import Dashboard from '../pages/dashboard/Dashboard'
 import Store from '../pages/store/Store'
+import NotificationBar from '../components/NotificationBar/NotificationBar'
 
 const Router = () => {
   const token = Cookies.get('token')
@@ -20,6 +21,7 @@ const Router = () => {
 
   return (
     <BrowserRouter>
+      <NotificationBar />
       <Routes>
         <Route path='/' element={<Navigate to='/login' replace />} />
         <Route path='/login' element={<Auth authRoute='login' />} />
@@ -27,7 +29,7 @@ const Router = () => {
         <Route element={<ProtectedRoute selectTab={selectTab} setSelectTab={setSelectTab} />}>
           <Route path='/dashboard' element={<Dashboard setSelectTab={setSelectTab} />} />
           <Route path='/store' element={<Store setSelectTab={setSelectTab} />} />
-          <Route path='/setting' element={<>setting</>} />
+          <Route path='/setting' element={<div style={{ height: '100vh' }}>setting</div>} />
         </Route>
       </Routes>
     </BrowserRouter>

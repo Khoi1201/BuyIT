@@ -29,12 +29,7 @@ const Navbar = ({ selectTab, setSelectTab }) => {
   }
   return (
     <>
-      <Menu
-        items={items}
-        onClick={onClick}
-        selectedKeys={selectTab}
-        defaultSelectedKeys={['1']}
-      />
+      <Menu items={items} onClick={onClick} selectedKeys={selectTab} defaultSelectedKeys={['1']} />
     </>
   )
 }

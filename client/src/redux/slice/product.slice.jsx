@@ -17,6 +17,15 @@ export const getAllProducts = createAsyncThunk('getAllProducts', async () => {
   }
 })
 
+export const addProduct = createAsyncThunk('addProduct', async (data) => {
+  try {
+    const response = await tbProductController.addProduct(data)
+    return response.data
+  } catch (error) {
+    console.log(error)
+  }
+})
+
 export const productSlice = createSlice({
   name: 'product',
   initialState,
@@ -32,6 +41,17 @@ export const productSlice = createSlice({
     })
     builder.addCase(getAllProducts.rejected, (state) => {
       state.status = 'failed'
+    })
+
+    //add product
+    builder.addCase(addProduct.pending, (state)=>{
+      state.addProductStatus='loading'
+    })
+    builder.addCase(addProduct.fulfilled, (state)=>{
+      state.addProductStatus='success'
+    })
+    builder.addCase(addProduct.rejected, (state)=>{
+      state.addProductStatus='failed'
     })
   },
 })

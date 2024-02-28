@@ -9,7 +9,7 @@ const Product = require('../models/Product')
 // @access Private
 
 router.post('/', verifyToken, async (req, res) => {
-  const { title, price, description, url } = req.body
+  const { title, price, description, url } = req?.body?.payload
 
   // Simple validation
   if (!title || !price)
@@ -50,7 +50,7 @@ router.get('/', verifyToken, async (req, res) => {
 // @access Private
 
 router.put('/:productId', verifyToken, async (req, res) => {
-  const { title, price, description, url } = req.body
+  const { title, price, description, url } = req.body.payload
 
   // Simple validation
   if (!title || !price)
