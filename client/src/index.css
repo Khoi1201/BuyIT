@@ -1,3 +1,11 @@
 body {
   margin: 0;
 }
+
+.content-light {
+  background-color: #f5f5f5;
+}
+
+.content-dark {
+  background-color: #272727;
+}

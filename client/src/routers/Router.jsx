@@ -9,8 +9,11 @@ import { loadUser } from '../redux/slice/login.slice'
 import Dashboard from '../pages/dashboard/Dashboard'
 import Store from '../pages/store/Store'
 import NotificationBar from '../components/NotificationBar/NotificationBar'
+import ThemeContext from '../context/themeContext'
+import Setting from '../pages/setting/Setting'
 
 const Router = () => {
+  const [theme, setTheme] = useState(localStorage.getItem('theme'))
   const token = Cookies.get('token')
   const dispatch = useDispatch()
   useEffect(() => {
@@ -20,19 +23,21 @@ const Router = () => {
   const [selectTab, setSelectTab] = useState()
 
   return (
-    <BrowserRouter>
-      <NotificationBar />
-      <Routes>
-        <Route path='/' element={<Navigate to='/login' replace />} />
-        <Route path='/login' element={<Auth authRoute='login' />} />
-        <Route path='/register' element={<Auth authRoute='register' />} />
-        <Route element={<ProtectedRoute selectTab={selectTab} setSelectTab={setSelectTab} />}>
-          <Route path='/dashboard' element={<Dashboard setSelectTab={setSelectTab} />} />
-          <Route path='/store' element={<Store setSelectTab={setSelectTab} />} />
-          <Route path='/setting' element={<div style={{ height: '100vh' }}>setting</div>} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
+    <ThemeContext.Provider value={theme}>
+      <BrowserRouter>
+        <NotificationBar />
+        <Routes>
+          <Route path='/' element={<Navigate to='/login' replace />} />
+          <Route path='/login' element={<Auth authRoute='login' />} />
+          <Route path='/register' element={<Auth authRoute='register' />} />
+          <Route element={<ProtectedRoute selectTab={selectTab} setSelectTab={setSelectTab} />}>
+            <Route path='/dashboard' element={<Dashboard setSelectTab={setSelectTab} />} />
+            <Route path='/store' element={<Store setSelectTab={setSelectTab} />} />
+            <Route path='/setting' element={<Setting theme={theme} setTheme={setTheme} />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </ThemeContext.Provider>
   )
 }
 

@@ -5,7 +5,7 @@ import {
   QuestionCircleOutlined,
   SettingOutlined,
 } from '@ant-design/icons'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import {
   addProduct,
@@ -16,8 +16,11 @@ import {
 import Meta from 'antd/es/card/Meta'
 import ModalAddProduct from '../../components/Modal/ModalAdd/ModalAddProduct'
 import ModalUpdateProduct from '../../components/Modal/ModalUpdate/ModalUpdateProduct'
+import ThemeContext from '../../context/themeContext'
+import './index.css'
 
 const Store = ({ setSelectTab }) => {
+  const theme = useContext(ThemeContext)
   const dispatch = useDispatch()
   const products = useSelector((state) => state.product.products)
   const [showAddWindow, setShowAddWindow] = useState(false)
@@ -110,6 +113,7 @@ const Store = ({ setSelectTab }) => {
         {products?.map((product) => {
           return (
             <Card
+              className={'card-' + theme}
               key={product._id}
               id={product._id}
               cover={
@@ -154,6 +158,7 @@ const Store = ({ setSelectTab }) => {
         })}
 
         <Card
+          className={'card-' + theme}
           style={{ width: 300, display: 'flex', justifyContent: 'center', alignItems: 'center' }}
           hoverable
           onClick={openAddWindow}
