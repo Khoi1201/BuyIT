@@ -27,7 +27,7 @@ const Store = ({ setSelectTab }) => {
   const [showUpdateWindow, setShowUpdateWindow] = useState(false)
   const [form] = Form.useForm()
   const [formUpdate] = Form.useForm()
-  const [updateId, setUpdateId] = useState('')
+  const [updateProductData, setUpdateProductData] = useState('')
 
   // add form
 
@@ -62,22 +62,30 @@ const Store = ({ setSelectTab }) => {
 
   // update form
 
-  const openUpdateWindow = (data) => {
-    setUpdateId(data._id)
-    formUpdate.setFieldsValue(data)
+  const openUpdateWindow = (product) => {
+    formUpdate.setFieldsValue({ ...product, id: product._id })
+    setUpdateProductData(product)
     setShowUpdateWindow(true)
   }
 
   const handleSubmitUpdate = () => {
     formUpdate.validateFields().then(async (data) => {
-      // Handle form submission logic here
-      await dispatch(updateProduct({ ...data, id: updateId }))
-      await dispatch(getAllProducts())
+      if (
+        !(
+          data.description === updateProductData.description &&
+          data.price === updateProductData.price &&
+          data.title === updateProductData.title &&
+          data.url === updateProductData.url
+        )
+      ) {
+        await dispatch(updateProduct(data))
+        await dispatch(getAllProducts())
 
-      // Clear form values
-      formUpdate.resetFields()
+        formUpdate.resetFields()
 
-      // Close the modal
+        setShowUpdateWindow(false)
+      }
+      // prevent default
       setShowUpdateWindow(false)
     })
   }
@@ -91,10 +99,10 @@ const Store = ({ setSelectTab }) => {
   }, [])
   useEffect(() => {
     dispatch(getAllProducts())
-  }, [addProduct])
+  }, [])
 
   return (
-    <div style={products ? {} : { height: '100vh' }}>
+    <div style={products.length < 4 ? { height: '100vh' } : {}}>
       <ModalAddProduct
         showAddWindow={showAddWindow}
         handleCancel={handleCancel}
@@ -107,6 +115,7 @@ const Store = ({ setSelectTab }) => {
         handleCancelUpdate={handleCancelUpdate}
         handleSubmitUpdate={handleSubmitUpdate}
         formUpdate={formUpdate}
+        updateProductData={updateProductData}
       />
 
       <Flex wrap='wrap' gap={'large'}>
@@ -159,7 +168,13 @@ const Store = ({ setSelectTab }) => {
 
         <Card
           className={'card-' + theme}
-          style={{ width: 300, display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+          style={{
+            height: 400,
+            width: 300,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
           hoverable
           onClick={openAddWindow}
         >

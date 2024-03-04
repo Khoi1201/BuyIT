@@ -32,7 +32,7 @@ export const login = createAsyncThunk('login', async ({ username, password }, { 
 
 export const register = createAsyncThunk('register', async ({ username, password }) => {
   try {
-    await tbAuthController.register(username, password )
+    await tbAuthController.register(username, password)
   } catch (error) {
     console.log(error)
   }

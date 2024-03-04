@@ -15,7 +15,7 @@ const ModalUpdateProduct = ({
         <Button key='cancel' onClick={handleCancelUpdate}>
           Cancel
         </Button>,
-        <Button key='submit' type='primary' onClick={handleSubmitUpdate}>
+        <Button key='submit' type='primary' htmlType='submit' onClick={handleSubmitUpdate}>
           Submit
         </Button>,
       ]}
@@ -32,13 +32,16 @@ const ModalUpdateProduct = ({
           maxWidth: 600,
         }}
       >
+        <Form.Item hidden name='id'>
+          <Input></Input>
+        </Form.Item>
         <Form.Item label='Name of product' name='title' required>
           <Input />
         </Form.Item>
-        <Form.Item label='Price' name='price' required >
+        <Form.Item label='Price' name='price' required>
           <InputNumber addonAfter='$' min={1} max={999} />
         </Form.Item>
-        <Form.Item label='Description' name='description' initialValue={''}>
+        <Form.Item label='Description' name='description'>
           <Input />
         </Form.Item>
         <Form.Item label='Image url' name='url' required>

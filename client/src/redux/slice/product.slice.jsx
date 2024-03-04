@@ -17,30 +17,33 @@ export const getAllProducts = createAsyncThunk('getAllProducts', async () => {
   }
 })
 
-export const addProduct = createAsyncThunk('addProduct', async (data) => {
+export const addProduct = createAsyncThunk('addProduct', async (data, { rejectWithValue }) => {
   try {
     const response = await tbProductController.addProduct(data)
     return response.data
   } catch (error) {
-    console.log(error)
+    return rejectWithValue(error.response.data)
   }
 })
 
-export const updateProduct = createAsyncThunk('updateProduct', async (data) => {
-  try {
-    const response = await tbProductController.updateProduct(data)
-    return response.data
-  } catch (error) {
-    console.log(error)
+export const updateProduct = createAsyncThunk(
+  'updateProduct',
+  async (data, { rejectWithValue }) => {
+    try {
+      const response = await tbProductController.updateProduct(data)
+      return response.data
+    } catch (error) {
+      return rejectWithValue(error.response.data)
+    }
   }
-})
+)
 
-export const deleteProduct = createAsyncThunk('deleteProduct', async (id) => {
+export const deleteProduct = createAsyncThunk('deleteProduct', async (id, { rejectWithValue }) => {
   try {
     const response = await tbProductController.deleteProduct(id)
     return response.data
   } catch (error) {
-    console.log(error)
+    return rejectWithValue(error.response.data)
   }
 })
 
