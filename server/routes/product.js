@@ -45,6 +45,19 @@ router.get('/', verifyToken, async (req, res) => {
   }
 })
 
+// @route GET api/store/products
+// @desc get all products from all user
+// @access Public
+
+router.get('/store', async (req, res) => {
+  try {
+    const allProducts = await Product.find() /* .select('-user')  */
+    res.json({ success: true, allProducts })
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Internal server error' })
+  }
+})
+
 // @route PUT api/products/:productId
 // @desc Upadte product
 // @access Private

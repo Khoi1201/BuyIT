@@ -6,7 +6,7 @@ const axios = require('axios')
 
 const authRouter = require('./routes/auth')
 // const userRouter = require('./routes/user')
-const productRouter = require("./routes/product");
+const productRouter = require('./routes/product')
 
 const connectDB = async () => {
   try {
@@ -24,7 +24,7 @@ app.use(express.json())
 app.use(cors())
 
 app.use('/api/auth', authRouter)
-app.use("/api/products", productRouter);
+app.use('/api/products', productRouter)
 // app.use('/api/user', userRouter)
 
 const PORT = process.env.PORT || 1203

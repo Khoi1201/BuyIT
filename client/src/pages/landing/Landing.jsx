@@ -1,19 +1,16 @@
-import { Button, Layout } from 'antd'
+import { Button, Col, Layout, Row } from 'antd'
 import { Content, Footer, Header } from 'antd/es/layout/layout'
 import { Link, Navigate } from 'react-router-dom'
 
 const headerStyle = {
   textAlign: 'center',
   color: '#fff',
-  height: 100,
   paddingInline: 48,
   lineHeight: '20px',
-  backgroundColor: '#4096ff',
 }
 const contentStyle = {
   textAlign: 'center',
   minHeight: 120,
-  lineHeight: '120px',
   color: '#fff',
   backgroundColor: '#0958d9',
 }
@@ -23,22 +20,28 @@ const footerStyle = {
   backgroundColor: '#4096ff',
 }
 const layoutStyle = {
-  borderRadius: 8,
-  overflow: 'hidden',
   width: '100%',
-  minHeight:'100vh',
+  minHeight: '100vh',
 }
 
 const Landing = () => {
   return (
     <Layout style={layoutStyle}>
       <Header style={headerStyle}>
-        <div>
-          <p>Hello</p>
-          <Link to={'/login'}>Login to Start selling</Link>
-        </div>
+        <Row>
+          <Col span={12}>
+            <p>Hello</p>
+          </Col>
+          <Col span={12}>
+            <p>
+              <Link to={'/login'}>Login to Start selling</Link>
+            </p>
+          </Col>
+        </Row>
       </Header>
-      <Content style={contentStyle}>Content</Content>
+      <Content style={contentStyle}>
+        
+      </Content>
       <Footer style={footerStyle}>Footer</Footer>
     </Layout>
   )
