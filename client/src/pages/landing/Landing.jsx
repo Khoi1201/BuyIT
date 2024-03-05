@@ -25,8 +25,8 @@ const footerStyle = {
 const layoutStyle = {
   borderRadius: 8,
   overflow: 'hidden',
-  width: 'calc(50% - 8px)',
-  maxWidth: 'calc(50% - 8px)',
+  width: '100%',
+  minHeight:'100vh',
 }
 
 const Landing = () => {

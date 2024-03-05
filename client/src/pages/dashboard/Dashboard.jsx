@@ -3,7 +3,7 @@ import React, { useEffect } from 'react'
 const Dashboard = ({ setSelectTab }) => {
   useEffect(() => setSelectTab('dashboard'), [])
   return (
-    <div style={{ height: '100vh' }}>
+    <div >
       <span>Dashboard for statistic purpose</span>
     </div>
   )

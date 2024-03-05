@@ -15,7 +15,7 @@ const ProtectedRoute = ({ selectTab, setSelectTab }) => {
 
   return authenticated ? (
     <>
-      <Layout style={{ height: '100%' }}>
+      <Layout style={{ height: '100%', minHeight: '100vh' }}>
         <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
           <Navbar selectTab={selectTab} setSelectTab={setSelectTab} />
         </Sider>

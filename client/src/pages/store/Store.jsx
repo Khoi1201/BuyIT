@@ -102,7 +102,7 @@ const Store = ({ setSelectTab }) => {
   }, [])
 
   return (
-    <div style={products.length < 4 ? { height: '100vh' } : {}}>
+    <div>
       <ModalAddProduct
         showAddWindow={showAddWindow}
         handleCancel={handleCancel}

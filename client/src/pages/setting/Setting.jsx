@@ -27,7 +27,7 @@ const Setting = ({ theme, setTheme, setSelectTab }) => {
   }
 
   return (
-    <div style={{ height: '100vh' }}>
+    <div >
       <Col span={24}>
         <Row>
           <Button onClick={changeTheme}>Change Theme with a Click!</Button>
