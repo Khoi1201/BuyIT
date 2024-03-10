@@ -1,12 +1,11 @@
 import React, { useState } from 'react'
 
-// import { Navigate } from 'react-router-dom'
 import LoginForm from './login/LoginForm'
 import RegisterForm from './register/RegisterForm'
 import { useSelector } from 'react-redux'
-import { Navigate } from 'react-router-dom'
+import { Navigate, useLocation } from 'react-router-dom'
 
-const Auth = ({ authRoute }) => {
+const Auth = ({ authRoute, mem }) => {
   const authenticated = useSelector((state) => state.authentication.authenticated)
 
   let body = <>{authRoute === 'login' ? <LoginForm /> : <RegisterForm />}</>
@@ -21,7 +20,7 @@ const Auth = ({ authRoute }) => {
       </div>
     </div>
   ) : (
-    <Navigate to={'/dashboard'} replace={true} />
+    <Navigate to={mem.pathname} />
   )
 }
 

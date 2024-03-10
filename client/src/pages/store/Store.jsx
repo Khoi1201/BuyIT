@@ -99,6 +99,7 @@ const Store = ({ setSelectTab }) => {
   useEffect(() => {
     setSelectTab('store')
   }, [])
+
   useEffect(() => {
     dispatch(getProducts())
   }, [])
@@ -162,7 +163,14 @@ const Store = ({ setSelectTab }) => {
                 </Popconfirm>,
               ]}
             >
-              <Meta title={product.title} description={product.description} />
+              <Meta
+                title={product.title}
+                description={
+                  product.description.split(' ').length > 5
+                    ? product.description.split(' ').slice(0, 5).join(' ') + ' ...'
+                    : product.description
+                }
+              />
               <span>Price: {product.price} $</span>
             </Card>
           )

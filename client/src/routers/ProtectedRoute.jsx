@@ -1,5 +1,5 @@
-import React, { useContext, useState } from 'react'
-import { Navigate, Outlet } from 'react-router-dom'
+import React, { useContext, useEffect, useState } from 'react'
+import { Navigate, Outlet, useLocation } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import Navbar from '../components/Navbar/Navbar'
 import { Content } from 'antd/es/layout/layout'
@@ -7,11 +7,14 @@ import { Layout } from 'antd'
 import Sider from 'antd/es/layout/Sider'
 import ThemeContext from '../context/themeContext'
 
-const ProtectedRoute = ({ selectTab, setSelectTab }) => {
+const ProtectedRoute = ({ selectTab, setSelectTab, setMem }) => {
   const theme = useContext(ThemeContext)
   const authenticated = useSelector((state) => state.authentication.authenticated)
 
   const [collapsed, setCollapsed] = useState(false)
+
+  const location = useLocation()
+  useEffect(() => setMem(location), [setMem])
 
   return authenticated ? (
     <>
@@ -29,7 +32,7 @@ const ProtectedRoute = ({ selectTab, setSelectTab }) => {
       </Layout>
     </>
   ) : (
-    <Navigate to={'/login'} replace />
+    <Navigate to={'/login'} />
   )
 }
 

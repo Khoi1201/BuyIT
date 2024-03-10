@@ -1,12 +1,6 @@
-import React, { useState } from 'react'
-import { Button, Menu } from 'antd'
-import {
-  AppstoreOutlined,
-  MailOutlined,
-  MenuFoldOutlined,
-  MenuUnfoldOutlined,
-  SettingOutlined,
-} from '@ant-design/icons'
+import { AppstoreOutlined, MailOutlined, SettingOutlined } from '@ant-design/icons'
+import { Menu } from 'antd'
+import React from 'react'
 import { useNavigate } from 'react-router-dom'
 
 const getItem = (label, key, icon, children, type) => {
@@ -23,7 +17,6 @@ const Navbar = ({ selectTab, setSelectTab }) => {
   const navigate = useNavigate()
 
   const onClick = (e) => {
-    // console.log('click ', e)
     setSelectTab(e)
     navigate('/' + e.key)
   }
