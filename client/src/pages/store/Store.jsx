@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import {
   addProduct,
   deleteProduct,
-  getAllProducts,
+  getProducts,
   updateProduct,
 } from '../../redux/slice/product.slice'
 import Meta from 'antd/es/card/Meta'
@@ -39,7 +39,7 @@ const Store = ({ setSelectTab }) => {
     form.validateFields().then(async (data) => {
       // Handle form submission logic here
       await dispatch(addProduct(data))
-      dispatch(getAllProducts())
+      dispatch(getProducts())
 
       // Clear form values
       form.resetFields()
@@ -57,7 +57,7 @@ const Store = ({ setSelectTab }) => {
 
   const handleDelete = async (id) => {
     await dispatch(deleteProduct(id))
-    dispatch(getAllProducts())
+    dispatch(getProducts())
   }
 
   // update form
@@ -72,20 +72,22 @@ const Store = ({ setSelectTab }) => {
     formUpdate.validateFields().then(async (data) => {
       if (
         !(
-          data.description === updateProductData.description &&
-          data.price === updateProductData.price &&
-          data.title === updateProductData.title &&
-          data.url === updateProductData.url
+          // prevent default
+          (
+            data.description === updateProductData.description && // update product data is old data
+            data.price === updateProductData.price &&
+            data.title === updateProductData.title &&
+            data.url === updateProductData.url
+          )
         )
       ) {
         await dispatch(updateProduct(data))
-        await dispatch(getAllProducts())
+        await dispatch(getProducts())
 
         formUpdate.resetFields()
 
         setShowUpdateWindow(false)
       }
-      // prevent default
       setShowUpdateWindow(false)
     })
   }
@@ -98,7 +100,7 @@ const Store = ({ setSelectTab }) => {
     setSelectTab('store')
   }, [])
   useEffect(() => {
-    dispatch(getAllProducts())
+    dispatch(getProducts())
   }, [])
 
   return (
@@ -118,7 +120,7 @@ const Store = ({ setSelectTab }) => {
         updateProductData={updateProductData}
       />
 
-      <Flex wrap='wrap' gap={'large'}>
+      <Flex wrap='wrap' gap={'large'} justify={'space-between'} style={{ margin: 'auto' }}>
         {products?.map((product) => {
           return (
             <Card
@@ -132,7 +134,7 @@ const Store = ({ setSelectTab }) => {
                   src={product.url}
                 />
               }
-              style={{ height: 400, width: 300 }}
+              style={{ height: 400, width: '30%' }}
               actions={[
                 <SettingOutlined
                   key='setting'

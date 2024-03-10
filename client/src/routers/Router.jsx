@@ -1,17 +1,17 @@
-import React, { useEffect, useLayoutEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
-import ProtectedRoute from './ProtectedRoute'
 import Auth from '../pages/auth/Auth'
+import ProtectedRoute from './ProtectedRoute'
 
 import Cookies from 'js-cookie'
 import { useDispatch, useSelector } from 'react-redux'
-import { loadUser } from '../redux/slice/login.slice'
-import Dashboard from '../pages/dashboard/Dashboard'
-import Store from '../pages/store/Store'
 import NotificationBar from '../components/NotificationBar/NotificationBar'
 import ThemeContext from '../context/themeContext'
-import Setting from '../pages/setting/Setting'
+import Dashboard from '../pages/dashboard/Dashboard'
 import Landing from '../pages/landing/Landing'
+import Setting from '../pages/setting/Setting'
+import Store from '../pages/store/Store'
+import { loadUser } from '../redux/slice/login.slice'
 
 const Router = () => {
   const dispatch = useDispatch()
@@ -19,9 +19,8 @@ const Router = () => {
 
   const [theme, setTheme] = useState(localStorage.getItem('theme'))
   const token = Cookies.get('token')
-  useLayoutEffect(() => {
-    if (token && !authenticated) dispatch(loadUser())
-  })
+
+  if (token && !authenticated) dispatch(loadUser())
 
   const [selectTab, setSelectTab] = useState()
 

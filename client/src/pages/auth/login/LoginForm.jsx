@@ -40,7 +40,7 @@ const LoginForm = ({ setTab }) => {
             },
           ]}
         >
-          <Input placeholder='Input username' />
+          <Input autoComplete='username' placeholder='Input username' />
         </Form.Item>
         <Form.Item
           name={'password'}
@@ -52,7 +52,7 @@ const LoginForm = ({ setTab }) => {
             },
           ]}
         >
-          <Input.Password placeholder='Input password' />
+          <Input.Password autoComplete={'current-password'} placeholder='Input password' />
         </Form.Item>
         <Form.Item {...tailLayout}>
           <Button type='primary' htmlType='submit'>

@@ -49,7 +49,7 @@ const RegisterForm = () => {
             },
           ]}
         >
-          <Input placeholder='Input username' />
+          <Input autoComplete='username' placeholder='Input username' />
         </Form.Item>
         <Form.Item
           name={'password'}
@@ -61,7 +61,7 @@ const RegisterForm = () => {
             },
           ]}
         >
-          <Input.Password placeholder='Input password' />
+          <Input.Password autoComplete='new-password' placeholder='Input password' />
         </Form.Item>
         <Form.Item
           name={'confirmPassword'}
@@ -82,7 +82,7 @@ const RegisterForm = () => {
             }),
           ]}
         >
-          <Input.Password placeholder='Input password' />
+          <Input.Password autoComplete='new-password' placeholder='Input password' />
         </Form.Item>
 
         <Form.Item {...tailLayout}>

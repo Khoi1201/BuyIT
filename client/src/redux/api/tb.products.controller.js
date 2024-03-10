@@ -1,8 +1,13 @@
 import { axiosCustom } from './axios.custom'
 
 const tbProductController = {
-  getAllProducts() {
+  getProducts() {
     const url = '/products'
+    return axiosCustom.get(url, {})
+  },
+
+  getAllProducts() {
+    const url = '/products/store'
     return axiosCustom.get(url, {})
   },
 

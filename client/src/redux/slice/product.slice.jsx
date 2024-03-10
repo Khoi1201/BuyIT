@@ -8,9 +8,9 @@ export const initialState = {
   status: 'idle',
 }
 
-export const getAllProducts = createAsyncThunk('getAllProducts', async () => {
+export const getProducts = createAsyncThunk('getProducts', async () => {
   try {
-    const response = await tbProductController.getAllProducts() // token based
+    const response = await tbProductController.getProducts() // token based
     return response.data.products
   } catch (error) {
     console.log(error)
@@ -53,14 +53,14 @@ export const productSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     //get all product
-    builder.addCase(getAllProducts.pending, (state) => {
+    builder.addCase(getProducts.pending, (state) => {
       state.status = 'loading'
     })
-    builder.addCase(getAllProducts.fulfilled, (state, action) => {
+    builder.addCase(getProducts.fulfilled, (state, action) => {
       state.status = 'success'
       state.products = action.payload
     })
-    builder.addCase(getAllProducts.rejected, (state) => {
+    builder.addCase(getProducts.rejected, (state) => {
       state.status = 'failed'
     })
 
