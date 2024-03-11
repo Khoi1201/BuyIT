@@ -17,7 +17,7 @@ const Router = () => {
   const dispatch = useDispatch()
   const authenticated = useSelector((state) => state.authentication.authenticated)
 
-  const [mem, setMem] = useState()
+  const [mem, setMem] = useState('/dashboard')
   const [theme, setTheme] = useState(localStorage.getItem('theme'))
   const token = Cookies.get('token')
 
@@ -31,7 +31,7 @@ const Router = () => {
         <NotificationBar />
         <Routes>
           <Route path='/' element={<ChangeTab />} />
-          <Route path='/login' element={<Auth authRoute='login' mem={mem}/>} />
+          <Route path='/login' element={<Auth authRoute='login' mem={mem} />} />
           <Route path='/register' element={<Auth authRoute='register' />} />
           <Route
             element={

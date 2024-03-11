@@ -1,4 +1,4 @@
-import { Button, Card, Flex, Form, Image, Input, Modal, Popconfirm, Typography } from 'antd'
+import { Button, Card, Flex, Form, Image, Input, List, Modal, Popconfirm, Typography } from 'antd'
 import {
   DeleteOutlined,
   PlusCircleOutlined,
@@ -120,77 +120,88 @@ const Store = ({ setSelectTab }) => {
         formUpdate={formUpdate}
         updateProductData={updateProductData}
       />
-
-      <Flex wrap='wrap' gap={'large'} justify={'space-between'} style={{ margin: 'auto' }}>
-        {products?.map((product) => {
-          return (
-            <Card
-              className={'card-' + theme}
-              key={product._id}
-              id={product._id}
-              cover={
-                <Image
-                  style={{ width: '100%', height: 235, objectFit: 'cover' }}
-                  alt='cover'
-                  src={product.url}
-                />
-              }
-              style={{ height: 400, width: '30%' }}
-              actions={[
-                <SettingOutlined
-                  key='setting'
-                  onClick={() => {
-                    openUpdateWindow(product)
+      <List
+        grid={{
+          gutter: 16,
+          column: 3,
+        }}
+        dataSource={products.concat({ title: 'addButton' })}
+        renderItem={(product, i) => {
+          if (i === products.length) {
+            return (
+              <List.Item>
+                <Card
+                  className={'card-' + theme}
+                  style={{
+                    height: 400,
+                    width: 300,
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
                   }}
-                />,
-                <Popconfirm
-                  title='Delete item'
-                  description='Are you sure to delete this product?'
-                  onConfirm={() => handleDelete(product._id)}
-                  okText='Yes'
-                  okType={'danger'}
-                  cancelText='No'
-                  icon={
-                    <QuestionCircleOutlined
-                      style={{
-                        color: 'red',
-                      }}
+                  hoverable
+                  onClick={openAddWindow}
+                >
+                  <PlusCircleOutlined style={{ fontSize: 70, fontWeight: 'lighter' }} />
+                </Card>
+              </List.Item>
+            )
+          } else
+            return (
+              <List.Item>
+                <Card
+                  className={'card-' + theme}
+                  key={product._id}
+                  id={product._id}
+                  cover={
+                    <Image
+                      style={{ width: '100%', height: 235, objectFit: 'cover' }}
+                      alt='cover'
+                      src={product.url}
                     />
                   }
-                  placement='topRight'
+                  style={{ height: 400, width: '100%' }}
+                  actions={[
+                    <SettingOutlined
+                      key='setting'
+                      onClick={() => {
+                        openUpdateWindow(product)
+                      }}
+                    />,
+                    <Popconfirm
+                      title='Delete item'
+                      description='Are you sure to delete this product?'
+                      onConfirm={() => handleDelete(product._id)}
+                      okText='Yes'
+                      okType={'danger'}
+                      cancelText='No'
+                      icon={
+                        <QuestionCircleOutlined
+                          style={{
+                            color: 'red',
+                          }}
+                        />
+                      }
+                      placement='topRight'
+                    >
+                      <DeleteOutlined key='delete' />
+                    </Popconfirm>,
+                  ]}
                 >
-                  <DeleteOutlined key='delete' />
-                </Popconfirm>,
-              ]}
-            >
-              <Meta
-                title={product.title}
-                description={
-                  product.description.split(' ').length > 5
-                    ? product.description.split(' ').slice(0, 5).join(' ') + ' ...'
-                    : product.description
-                }
-              />
-              <span>Price: {product.price} $</span>
-            </Card>
-          )
-        })}
-
-        <Card
-          className={'card-' + theme}
-          style={{
-            height: 400,
-            width: 300,
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-          hoverable
-          onClick={openAddWindow}
-        >
-          <PlusCircleOutlined style={{ fontSize: 70, fontWeight: 'lighter' }} />
-        </Card>
-      </Flex>
+                  <Meta
+                    title={product.title}
+                    description={
+                      product.description.split(' ').length > 5
+                        ? product.description.split(' ').slice(0, 5).join(' ') + ' ...'
+                        : product.description
+                    }
+                  />
+                  <span>Price: {product.price} $</span>
+                </Card>
+              </List.Item>
+            )
+        }}
+      />
     </div>
   )
 }

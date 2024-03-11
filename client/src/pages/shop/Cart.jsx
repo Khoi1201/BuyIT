@@ -1,12 +1,22 @@
-import { Image, Table } from 'antd'
+import { Button, Image, Space, Table } from 'antd'
 import React from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { removeFromCart } from '../../redux/slice/store.slice'
 
 const Cart = () => {
+  const dispatch = useDispatch()
   const allProducts = useSelector((state) => state.store.allProducts)
   const cartItems = useSelector((state) => state.store.cart)
 
-  const dataSource = allProducts.filter((product) => cartItems.includes(product._id))
+  const dataSource = allProducts
+    .filter((product) => cartItems.includes(product._id))
+    .map((filterd, i) => {
+      return { ...filterd, key: i }
+    })
+
+  const removeItem = (id) => {
+    dispatch(removeFromCart(id))
+  }
 
   const renderImage = (url) => (
     <Image
@@ -25,7 +35,16 @@ const Cart = () => {
       render: renderImage,
     },
     { title: 'Name', dataIndex: 'title', key: 'title' },
-    { title: 'Price', dataIndex: 'price', key: 'price' },
+    { title: 'Price($)', dataIndex: 'price', key: 'price' },
+    {
+      title: 'Action',
+      key: 'action',
+      render: (_, record) => (
+        <Space>
+          <Button onClick={() => removeItem(record._id)}>Remove</Button>
+        </Space>
+      ),
+    },
   ]
 
   return (

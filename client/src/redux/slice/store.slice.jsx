@@ -34,6 +34,10 @@ export const storeSlice = createSlice({
       }
       localStorage.setItem('cart', state.cart)
     },
+    removeFromCart: (state, action) => {
+      state.cart = state.cart.filter((id) => id !== action.payload)
+      localStorage.setItem('cart', state.cart)
+    },
   },
   extraReducers: (builder) => {
     //get all product
@@ -50,6 +54,6 @@ export const storeSlice = createSlice({
   },
 })
 
-export const { loadCart, addToCart } = storeSlice.actions
+export const { loadCart, addToCart, removeFromCart } = storeSlice.actions
 
 export default storeSlice.reducer

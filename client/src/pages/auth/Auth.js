@@ -20,7 +20,7 @@ const Auth = ({ authRoute, mem }) => {
       </div>
     </div>
   ) : (
-    <Navigate to={mem.pathname} />
+    <Navigate to={mem.pathname || '/dashboard'} />
   )
 }
 

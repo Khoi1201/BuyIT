@@ -1,5 +1,5 @@
 import { ShoppingCartOutlined, ShoppingOutlined } from '@ant-design/icons'
-import { Card, Flex, Image } from 'antd'
+import { Card, Image, List } from 'antd'
 import Meta from 'antd/es/card/Meta'
 import { useContext } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
@@ -16,14 +16,15 @@ const Shop = () => {
   }
 
   return (
-    <Flex
-      wrap='wrap'
-      justify={'space-between'}
+    <List
       style={{ maxWidth: '80%', margin: 'auto' }}
-      gap={'large'}
-    >
-      {allProducts?.map((product) => {
-        return (
+      grid={{
+        gutter: 16,
+        column: 3,
+      }}
+      dataSource={allProducts}
+      renderItem={(product) => (
+        <List.Item>
           <Card
             className={'card-' + theme}
             key={product._id}
@@ -36,7 +37,7 @@ const Shop = () => {
                 src={product.url}
               />
             }
-            style={{ height: 400, width: '30%' }}
+            style={{ height: 400, width: '100%' }}
             actions={[
               <ShoppingCartOutlined
                 key='cart'
@@ -62,9 +63,9 @@ const Shop = () => {
             />
             <span>Price: {product.price} $</span>
           </Card>
-        )
-      })}
-    </Flex>
+        </List.Item>
+      )}
+    />
   )
 }
 
