@@ -1,8 +1,8 @@
 import React from 'react'
-import { Button, Form, Input } from 'antd'
+import { Button, Col, Form, Input, Row } from 'antd'
 import { useDispatch } from 'react-redux'
 import { login } from '../../../redux/slice/login.slice'
-import { Navigate, useNavigate } from 'react-router-dom'
+import { Link, Navigate, useNavigate } from 'react-router-dom'
 
 const layout = {
   labelCol: {
@@ -40,7 +40,7 @@ const LoginForm = ({ setTab }) => {
             },
           ]}
         >
-          <Input placeholder='Input username' />
+          <Input autoComplete='username' placeholder='Input username' />
         </Form.Item>
         <Form.Item
           name={'password'}
@@ -52,7 +52,7 @@ const LoginForm = ({ setTab }) => {
             },
           ]}
         >
-          <Input.Password placeholder='Input password' />
+          <Input.Password autoComplete={'current-password'} placeholder='Input password' />
         </Form.Item>
         <Form.Item {...tailLayout}>
           <Button type='primary' htmlType='submit'>
@@ -60,7 +60,18 @@ const LoginForm = ({ setTab }) => {
           </Button>
         </Form.Item>
       </Form>
-      <span onClick={() =>       navigate('/register')}>Register</span>
+      <Row justify={'space-evenly'}>
+        <Col>
+          <Button>
+            <Link to={'/register'}>Register</Link>
+          </Button>
+        </Col>
+        <Col>
+          <Button>
+            <Link to={'/landing'}>Landing Page</Link>
+          </Button>
+        </Col>
+      </Row>
     </div>
   )
 }

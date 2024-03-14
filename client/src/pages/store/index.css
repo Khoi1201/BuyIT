@@ -1,0 +1,16 @@
+.card-light {
+    background-color: #fff;
+}
+
+.card-dark {
+    background-color: #323232;
+
+    .ant-card-body {
+        color: #fff;
+
+        .ant-card-meta-title,
+        .ant-card-meta-description {
+            color: #fff;
+        }
+    }
+}

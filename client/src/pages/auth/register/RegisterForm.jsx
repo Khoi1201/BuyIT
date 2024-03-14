@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react'
-import { Button, Form, Input } from 'antd'
+import { Button, Col, Form, Input, Row } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
 import { register } from '../../../redux/slice/login.slice'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 const layout = {
   labelCol: {
@@ -49,7 +49,7 @@ const RegisterForm = () => {
             },
           ]}
         >
-          <Input placeholder='Input username' />
+          <Input autoComplete='username' placeholder='Input username' />
         </Form.Item>
         <Form.Item
           name={'password'}
@@ -61,7 +61,7 @@ const RegisterForm = () => {
             },
           ]}
         >
-          <Input.Password placeholder='Input password' />
+          <Input.Password autoComplete='new-password' placeholder='Input password' />
         </Form.Item>
         <Form.Item
           name={'confirmPassword'}
@@ -82,15 +82,27 @@ const RegisterForm = () => {
             }),
           ]}
         >
-          <Input.Password placeholder='Input password' />
+          <Input.Password autoComplete='new-password' placeholder='Input password' />
         </Form.Item>
+
         <Form.Item {...tailLayout}>
           <Button type='primary' htmlType='submit'>
             register
           </Button>
         </Form.Item>
       </Form>
-      <span onClick={() => navigate('/login')}>Login</span>
+      <Row justify={'space-evenly'}>
+        <Col>
+          <Button>
+            <Link to={'/login'}>login</Link>
+          </Button>
+        </Col>
+        <Col>
+          <Button>
+            <Link to={'/landing'}>Landing Page</Link>
+          </Button>
+        </Col>
+      </Row>
     </div>
   )
 }
