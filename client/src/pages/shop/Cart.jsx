@@ -3,9 +3,8 @@ import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { removeFromCart } from '../../redux/slice/store.slice'
 
-const Cart = () => {
+const Cart = ({ setId, setShowDetailModal, allProducts }) => {
   const dispatch = useDispatch()
-  const allProducts = useSelector((state) => state.store.allProducts)
   const cartItems = useSelector((state) => state.store.cart)
 
   const dataSource = allProducts
@@ -19,37 +18,63 @@ const Cart = () => {
   }
 
   const renderImage = (url) => (
-    <Image
-      preview={false}
-      style={{ width: 50, height: 50, objectFit: 'cover' }}
-      alt='cover'
-      src={url}
-    />
+    <div className='center'>
+      <Image
+        preview={false}
+        style={{ width: 50, height: 50, objectFit: 'cover' }}
+        alt='cover'
+        src={url}
+      />
+    </div>
   )
 
   const columns = [
     {
-      title: 'Image',
+      title: (
+        <div className='center'>
+          <span>Image</span>
+        </div>
+      ),
       dataIndex: 'url',
       key: 'url',
       render: renderImage,
     },
-    { title: 'Name', dataIndex: 'title', key: 'title' },
-    { title: 'Price($)', dataIndex: 'price', key: 'price' },
     {
-      title: 'Action',
-      key: 'action',
+      title: 'Name',
+      dataIndex: 'title',
+      key: 'title',
       render: (_, record) => (
         <Space>
-          <Button onClick={() => removeItem(record._id)}>Remove</Button>
+          <p
+            style={{ cursor: 'pointer' }}
+            onClick={() => {
+              setId(record._id)
+              setShowDetailModal(true)
+            }}
+          >
+            {record.title}
+          </p>
         </Space>
+      ),
+    },
+    { title: 'Price($)', dataIndex: 'price', key: 'price' },
+    {
+      title: (
+        <div className='center'>
+          <span>Action</span>
+        </div>
+      ),
+      key: 'action',
+      render: (_, record) => (
+        <div className='center'>
+          <Button onClick={() => removeItem(record._id)}>Discard</Button>
+        </div>
       ),
     },
   ]
 
   return (
     <div style={{ maxWidth: '80%', margin: 'auto' }}>
-      sups?
       <Table dataSource={dataSource} columns={columns} />
     </div>
   )

@@ -8,8 +8,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { getAllProducts, loadCart } from '../../redux/slice/store.slice'
 import Shop from './Shop'
-import Detail from './Detail'
 import Cart from './Cart'
+import ModalDetail from '../../components/Modal/ModalDetail/ModalDetail'
 
 const headerStyle = {
   textAlign: 'center',
@@ -18,6 +18,7 @@ const headerStyle = {
   paddingTop: '10px',
 }
 const contentStyle = {
+  paddingTop: '10px',
   textAlign: 'center',
   color: '#fff',
   backgroundColor: '#0958d9',
@@ -33,9 +34,14 @@ const layoutStyle = {
 }
 
 const ChangeTab = () => {
+  
   const dispatch = useDispatch()
+  const allProducts = useSelector((state) => state.store.allProducts)
 
   const [currentTab, setCurrentTab] = useState()
+  const [showDetailModal, setShowDetailModal] = useState(false)
+  const [id, setId] = useState()
+
   const cart = useSelector((state) => state.store.cart)
 
   useEffect(() => {
@@ -49,13 +55,13 @@ const ChangeTab = () => {
   const renderSwitch = (tabName) => {
     switch (tabName) {
       case 'shop':
-        return <Shop />
+        return <Shop allProducts={allProducts} />
       case 'cart':
-        return <Cart />
-      case 'detail':
-        return <Detail />
+        return (
+          <Cart setId={setId} setShowDetailModal={setShowDetailModal} allProducts={allProducts} />
+        )
       default:
-        return <Shop />
+        return <Shop allProducts={allProducts} />
     }
   }
 
@@ -100,7 +106,16 @@ const ChangeTab = () => {
         </Row>
       </Header>
 
-      <Content style={contentStyle}>{renderSwitch(currentTab)}</Content>
+      <Content style={contentStyle}>
+        {renderSwitch(currentTab)}
+        {id && (
+          <ModalDetail
+            setShowDetailModal={setShowDetailModal}
+            showDetailModal={showDetailModal}
+            product={allProducts.find((product) => product._id === id)}
+          />
+        )}
+      </Content>
 
       <Footer style={footerStyle}>Footer</Footer>
     </Layout>

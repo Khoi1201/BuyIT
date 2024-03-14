@@ -1,15 +1,14 @@
 import { ShoppingCartOutlined, ShoppingOutlined } from '@ant-design/icons'
-import { Card, Image, List } from 'antd'
+import { Card, Flex, Image, List } from 'antd'
 import Meta from 'antd/es/card/Meta'
 import { useContext } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import ThemeContext from '../../context/themeContext'
 import { addToCart } from '../../redux/slice/store.slice'
 
-const Shop = () => {
+const Shop = ({ allProducts }) => {
   const dispatch = useDispatch()
   const theme = useContext(ThemeContext)
-  const allProducts = useSelector((state) => state.store.allProducts)
 
   const handleAddToCart = (id) => {
     dispatch(addToCart(id))
