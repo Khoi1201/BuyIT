@@ -21,22 +21,24 @@ export const storeSlice = createSlice({
   initialState,
   reducers: {
     loadCart: (state) => {
-      if (localStorage.getItem('cart') && !state.cart.length) {
-        localStorage
-          .getItem('cart')
-          .split(',')
-          .forEach((id) => state.cart.push(id))
-      }
+      state.cart = JSON.parse(localStorage.getItem('cart') || '[]')
     },
     addToCart: (state, action) => {
-      if (!state.cart.includes(action.payload)) {
-        state.cart.push(action.payload)
+      let idList = state.cart.map((item) => item.id)
+
+      if (!idList.includes(action.payload)) {
+        state.cart.push({ id: action.payload, quantity: 1 })
+        localStorage.setItem('cart', JSON.stringify(state.cart))
       }
-      localStorage.setItem('cart', state.cart)
+    },
+    updateCartQuantity: (state, action) => {
+      let tempI = state.cart.findIndex((item) => item.id === action.payload.id)
+      state.cart[tempI] = { id: action.payload.id, quantity: action.payload.value }
+      localStorage.setItem('cart', JSON.stringify(state.cart))
     },
     removeFromCart: (state, action) => {
-      state.cart = state.cart.filter((id) => id !== action.payload)
-      localStorage.setItem('cart', state.cart)
+      state.cart = state.cart.filter((item) => item.id !== action.payload)
+      localStorage.setItem('cart', JSON.stringify(state.cart))
     },
   },
   extraReducers: (builder) => {
@@ -54,6 +56,6 @@ export const storeSlice = createSlice({
   },
 })
 
-export const { loadCart, addToCart, removeFromCart } = storeSlice.actions
+export const { loadCart, addToCart, removeFromCart, updateCartQuantity } = storeSlice.actions
 
 export default storeSlice.reducer

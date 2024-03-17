@@ -34,7 +34,6 @@ const layoutStyle = {
 }
 
 const ChangeTab = () => {
-  
   const dispatch = useDispatch()
   const allProducts = useSelector((state) => state.store.allProducts)
 
@@ -117,7 +116,7 @@ const ChangeTab = () => {
         )}
       </Content>
 
-      <Footer style={footerStyle}>Footer</Footer>
+      <Footer style={footerStyle}>Copy right © by Khoi1203-3/2024 </Footer>
     </Layout>
   )
 }
