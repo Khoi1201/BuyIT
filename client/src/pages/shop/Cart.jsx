@@ -1,20 +1,30 @@
-import { Button, Image, Space, Table } from 'antd'
+import { Button, Image, InputNumber, Space, Table } from 'antd'
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { removeFromCart } from '../../redux/slice/store.slice'
+import { loadCart, removeFromCart, updateCartQuantity } from '../../redux/slice/store.slice'
 
 const Cart = ({ setId, setShowDetailModal, allProducts }) => {
   const dispatch = useDispatch()
   const cartItems = useSelector((state) => state.store.cart)
 
-  const dataSource = allProducts
-    .filter((product) => cartItems.includes(product._id))
-    .map((filterd, i) => {
-      return { ...filterd, key: i }
-    })
+  const dataSource = cartItems.map((item, i) => {
+    let temp = allProducts.find((product) => product._id === item.id)
+    return {
+      id: item.id,
+      key: i,
+      url: temp.url,
+      title: temp.title,
+      price: temp.price,
+      quantity: item.quantity,
+    }
+  })
 
   const removeItem = (id) => {
     dispatch(removeFromCart(id))
+  }
+
+  const updateQuantity = (id, value) => {
+    dispatch(updateCartQuantity({ id, value }))
   }
 
   const renderImage = (url) => (
@@ -48,7 +58,7 @@ const Cart = ({ setId, setShowDetailModal, allProducts }) => {
           <p
             style={{ cursor: 'pointer' }}
             onClick={() => {
-              setId(record._id)
+              setId(record.id)
               setShowDetailModal(true)
             }}
           >
@@ -57,7 +67,31 @@ const Cart = ({ setId, setShowDetailModal, allProducts }) => {
         </Space>
       ),
     },
-    { title: 'Price($)', dataIndex: 'price', key: 'price' },
+    { title: 'Unit Price($)', dataIndex: 'price', key: 'unitPrice' },
+    {
+      title: 'Quantity',
+      key: 'quantity',
+      render: (_, record) => {
+        return (
+          <InputNumber
+            controls
+            max={20}
+            min={1}
+            defaultValue={record.quantity ? record.quantity : 1}
+            value={record.quantity ? record.quantity : 1}
+            precision={0}
+            onChange={(value) => updateQuantity(record.id, value)}
+          ></InputNumber>
+        )
+      },
+    },
+    {
+      title: 'Total Price($)',
+      key: 'totalPrice',
+      render: (_, record) => {
+        return <span>{(record.quantity * record.price).toFixed(2)}</span>
+      },
+    },
     {
       title: (
         <div className='center'>
@@ -67,7 +101,7 @@ const Cart = ({ setId, setShowDetailModal, allProducts }) => {
       key: 'action',
       render: (_, record) => (
         <div className='center'>
-          <Button onClick={() => removeItem(record._id)}>Discard</Button>
+          <Button onClick={() => removeItem(record.id)}>Discard</Button>
         </div>
       ),
     },
