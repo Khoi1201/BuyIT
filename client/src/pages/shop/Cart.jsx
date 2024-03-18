@@ -1,11 +1,13 @@
 import { Button, Image, InputNumber, Space, Table } from 'antd'
-import React from 'react'
+import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { loadCart, removeFromCart, updateCartQuantity } from '../../redux/slice/store.slice'
+import { removeFromCart, updateCartQuantity } from '../../redux/slice/store.slice'
 
 const Cart = ({ setId, setShowDetailModal, allProducts }) => {
   const dispatch = useDispatch()
   const cartItems = useSelector((state) => state.store.cart)
+  const [selectedRowKeys, setSelectedRowKeys] = useState([])
+  const [loading, setLoading] = useState(false)
 
   const dataSource = cartItems.map((item, i) => {
     let temp = allProducts.find((product) => product._id === item.id)
@@ -19,8 +21,39 @@ const Cart = ({ setId, setShowDetailModal, allProducts }) => {
     }
   })
 
-  const removeItem = (id) => {
+  const start = () => {
+    setLoading(true)
+    // ajax request after empty completing
+    let buyItem = cartItems.filter((item, i) => {
+      return selectedRowKeys.includes(i)
+    })
+
+    setTimeout(() => {
+      // call server to make a purchase
+      console.log(buyItem) // give this
+
+      // clear cart
+      buyItem.map((item) => dispatch(removeFromCart(item.id)))
+      // clear selected
+      setSelectedRowKeys([])
+      setLoading(false)
+    }, 1000)
+  }
+
+  const onSelectChange = (newSelectedRowKeys) => {
+    setSelectedRowKeys(newSelectedRowKeys)
+  }
+
+  const rowSelection = {
+    selectedRowKeys,
+    onChange: onSelectChange,
+  }
+
+  const hasSelected = selectedRowKeys.length > 0
+
+  const removeItem = (id, i) => {
     dispatch(removeFromCart(id))
+    setSelectedRowKeys(selectedRowKeys.filter((key) => key !== i))
   }
 
   const updateQuantity = (id, value) => {
@@ -89,7 +122,8 @@ const Cart = ({ setId, setShowDetailModal, allProducts }) => {
       title: 'Total Price($)',
       key: 'totalPrice',
       render: (_, record) => {
-        return <span>{(record.quantity * record.price).toFixed(2)}</span>
+        const totalPrice = (record.quantity * record.price).toFixed(2)
+        return <span>{totalPrice}</span>
       },
     },
     {
@@ -101,7 +135,7 @@ const Cart = ({ setId, setShowDetailModal, allProducts }) => {
       key: 'action',
       render: (_, record) => (
         <div className='center'>
-          <Button onClick={() => removeItem(record.id)}>Discard</Button>
+          <Button onClick={() => removeItem(record.id, record.key)}>Discard</Button>
         </div>
       ),
     },
@@ -109,7 +143,19 @@ const Cart = ({ setId, setShowDetailModal, allProducts }) => {
 
   return (
     <div style={{ maxWidth: '80%', margin: 'auto' }}>
-      <Table dataSource={dataSource} columns={columns} />
+      <Table dataSource={dataSource} columns={columns} rowSelection={rowSelection} />
+      <div style={{ marginTop: '20px' }}>
+        <Button type='primary' onClick={start} disabled={!hasSelected} loading={loading}>
+          Buy
+        </Button>
+        <span
+          style={{
+            marginLeft: 8,
+          }}
+        >
+          {hasSelected ? `Selected ${selectedRowKeys.length} items` : ''}
+        </span>
+      </div>
     </div>
   )
 }

@@ -1,4 +1,4 @@
-import { createAsyncThunk, createReducer, createSlice } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import tbProductController from '../api/tb.products.controller'
 
 export const initialState = {

@@ -18,10 +18,8 @@ const headerStyle = {
   paddingTop: '10px',
 }
 const contentStyle = {
-  paddingTop: '10px',
+  padding: '20px 0',
   textAlign: 'center',
-  color: '#fff',
-  backgroundColor: '#0958d9',
 }
 const footerStyle = {
   textAlign: 'center',
