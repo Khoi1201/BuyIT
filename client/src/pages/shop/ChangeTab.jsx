@@ -114,7 +114,7 @@ const ChangeTab = () => {
         )}
       </Content>
 
-      <Footer style={footerStyle}>Copy right © by Khoi1203-3/2024 </Footer>
+      <Footer style={footerStyle}>Copyright © by Khoi1203-3/2024 </Footer>
     </Layout>
   )
 }

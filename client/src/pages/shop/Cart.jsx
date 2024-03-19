@@ -1,7 +1,8 @@
-import { Button, Image, InputNumber, Space, Table } from 'antd'
+import { Button, Col, Image, InputNumber, Row, Space, Table } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { removeFromCart, updateCartQuantity } from '../../redux/slice/store.slice'
+import CheckOut from './checkOut/CheckOut'
 
 const Cart = ({ setId, setShowDetailModal, allProducts }) => {
   const dispatch = useDispatch()
@@ -9,6 +10,7 @@ const Cart = ({ setId, setShowDetailModal, allProducts }) => {
   const [selectedRowKeys, setSelectedRowKeys] = useState([])
   const [loading, setLoading] = useState(false)
   const [total, setTotal] = useState(0)
+  const [showCheckout, setShowCheckout] = useState(false)
 
   const dataSource = cartItems.map((item, i) => {
     let temp = allProducts.find((product) => product._id === item.id)
@@ -30,23 +32,8 @@ const Cart = ({ setId, setShowDetailModal, allProducts }) => {
     )
   }, [cartItems, selectedRowKeys, total, dataSource])
 
-  const start = () => {
-    setLoading(true)
-    // ajax request after empty completing
-    let buyItem = cartItems.filter((item, i) => {
-      return selectedRowKeys.includes(i)
-    })
-
-    setTimeout(() => {
-      // call server to make a purchase
-      console.log(buyItem) // give this
-
-      // clear cart
-      buyItem.map((item) => dispatch(removeFromCart(item.id)))
-      // clear selected
-      setSelectedRowKeys([])
-      setLoading(false)
-    }, 1000)
+  const handleBuyAction = () => {
+    setShowCheckout(true)
   }
 
   const onSelectChange = (newSelectedRowKeys) => {
@@ -159,19 +146,35 @@ const Cart = ({ setId, setShowDetailModal, allProducts }) => {
 
   return (
     <div style={{ maxWidth: '80%', margin: 'auto' }}>
+      {showCheckout && (
+        <CheckOut
+          showCheckout={showCheckout}
+          setShowCheckout={() => setShowCheckout(false)}
+          items={cartItems.filter((_, i) => selectedRowKeys.includes(i))}
+          total={total}
+          setSelectedRowKeys={setSelectedRowKeys}
+          allProducts={allProducts}
+        />
+      )}
       <Table dataSource={dataSource} columns={columns} rowSelection={rowSelection} />
-      <div style={{ marginTop: '20px' }}>
-        <Button type='primary' onClick={start} disabled={!hasSelected} loading={loading}>
-          Buy
-        </Button>
-        <span
-          style={{
-            marginLeft: 8,
-          }}
-        >
-          {hasSelected ? `Selected ${selectedRowKeys.length} items, total ${total.toFixed(2)}` : ''}
-        </span>
-      </div>
+      <Row style={{ marginTop: '20px', alignItems: 'center' }}>
+        <Col>
+          <Button type='primary' onClick={handleBuyAction} disabled={!hasSelected}>
+            Buy
+          </Button>
+        </Col>
+        <Col>
+          <span
+            style={{
+              marginLeft: 8,
+            }}
+          >
+            {hasSelected
+              ? `Selected ${selectedRowKeys.length} items, total ${total.toFixed(2)}`
+              : ''}
+          </span>
+        </Col>
+      </Row>
     </div>
   )
 }
