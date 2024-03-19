@@ -1,5 +1,7 @@
 *.http
 
+test.js
+
 # Logs
 logs
 *.log

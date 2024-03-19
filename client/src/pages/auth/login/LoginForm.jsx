@@ -1,9 +1,12 @@
 import React from 'react'
-import { Button, Form, Input } from 'antd'
+import { Button, Col, Form, Input, Row } from 'antd'
+import { useDispatch } from 'react-redux'
+import { login } from '../../../redux/slice/login.slice'
+import { Link, Navigate, useNavigate } from 'react-router-dom'
 
 const layout = {
   labelCol: {
-    span: 8,
+    span: 10,
   },
   wrapperCol: {
     span: 16,
@@ -12,16 +15,21 @@ const layout = {
 
 const tailLayout = {
   wrapperCol: {
-    offset: 8,
+    offset: 10,
     span: 16,
   },
 }
 
-const LoginForm = () => {
+const LoginForm = ({ setTab }) => {
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+
+  const handleLogin = (data) => {
+    dispatch(login(data))
+  }
   return (
     <div>
-      login form
-      <Form {...layout}>
+      <Form {...layout} onFinish={handleLogin}>
         <Form.Item
           name={'username'}
           label='Username'
@@ -32,7 +40,7 @@ const LoginForm = () => {
             },
           ]}
         >
-          <Input placeholder='Input username' />
+          <Input autoComplete='username' placeholder='Input username' />
         </Form.Item>
         <Form.Item
           name={'password'}
@@ -40,11 +48,11 @@ const LoginForm = () => {
           rules={[
             {
               required: true,
-              essage: 'This field is required',
+              message: 'This field is required',
             },
           ]}
         >
-          <Input.Password placeholder='Input password' />
+          <Input.Password autoComplete={'current-password'} placeholder='Input password' />
         </Form.Item>
         <Form.Item {...tailLayout}>
           <Button type='primary' htmlType='submit'>
@@ -52,6 +60,18 @@ const LoginForm = () => {
           </Button>
         </Form.Item>
       </Form>
+      <Row justify={'space-evenly'}>
+        <Col>
+          <Button>
+            <Link to={'/register'}>Register</Link>
+          </Button>
+        </Col>
+        <Col>
+          <Button>
+            <Link to={'/landing'}>Landing Page</Link>
+          </Button>
+        </Col>
+      </Row>
     </div>
   )
 }

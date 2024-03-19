@@ -1,17 +1,15 @@
-import React from 'react'
+import React, { useState } from 'react'
 
-import { Navigate } from 'react-router-dom'
 import LoginForm from './login/LoginForm'
 import RegisterForm from './register/RegisterForm'
+import { useSelector } from 'react-redux'
+import { Navigate, useLocation } from 'react-router-dom'
 
-const Auth = ({ authRoute }) => {
-  let body = (
-    <>
-      {authRoute === 'login' && <LoginForm />}
-      {authRoute === 'register' && <RegisterForm />}
-    </>
-  )
-  return (
+const Auth = ({ authRoute, mem }) => {
+  const authenticated = useSelector((state) => state.authentication.authenticated)
+
+  let body = <>{authRoute === 'login' ? <LoginForm /> : <RegisterForm />}</>
+  return !authenticated ? (
     <div className='landing'>
       <div className='landing-inner'>
         <div className='landing-content'>
@@ -21,6 +19,8 @@ const Auth = ({ authRoute }) => {
         </div>
       </div>
     </div>
+  ) : (
+    <Navigate to={mem.pathname || '/dashboard'} />
   )
 }
 

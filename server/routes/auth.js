@@ -26,7 +26,7 @@ router.get('/', verifyToken, async (req, res) => {
 // @access public
 
 router.post('/register', async (req, res) => {
-  const { username, password } = req.body
+  const { username, password } = req.body.payload
 
   // simple validation
   if (!(username || password)) {
@@ -58,7 +58,7 @@ router.post('/register', async (req, res) => {
 // @access public
 
 router.post('/login', async (req, res) => {
-  const { username, password } = req.body
+  const { username, password } = req.body.payload
 
   // simple validation
   if (!(username || password)) {
@@ -79,11 +79,13 @@ router.post('/login', async (req, res) => {
     }
 
     // return token
-    const accesstoken = jwt.sign({ userId: user._id }, process.env.ACCESS_TOKEN_SECRET)
+    const accessToken = jwt.sign({ userId: user._id }, process.env.ACCESS_TOKEN_SECRET, {
+      expiresIn: '7d',
+    })
     res.json({
       success: true,
       message: 'Login successfully',
-      accesstoken,
+      accessToken,
     })
   } catch (error) {
     console.log(error)
