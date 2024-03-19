@@ -4,11 +4,9 @@ import { useDispatch, useSelector } from 'react-redux'
 import { removeFromCart, updateCartQuantity } from '../../redux/slice/store.slice'
 import CheckOut from './checkOut/CheckOut'
 
-const Cart = ({ setId, setShowDetailModal, allProducts }) => {
+const Cart = ({ setId, setShowDetailModal, allProducts ,selectedRowKeys,setSelectedRowKeys}) => {
   const dispatch = useDispatch()
   const cartItems = useSelector((state) => state.store.cart)
-  const [selectedRowKeys, setSelectedRowKeys] = useState([])
-  const [loading, setLoading] = useState(false)
   const [total, setTotal] = useState(0)
   const [showCheckout, setShowCheckout] = useState(false)
 
@@ -157,8 +155,17 @@ const Cart = ({ setId, setShowDetailModal, allProducts }) => {
         />
       )}
       <Table dataSource={dataSource} columns={columns} rowSelection={rowSelection} />
-      <Row style={{ marginTop: '20px', alignItems: 'center' }}>
-        <Col>
+      <Row
+        style={{
+
+          padding: '30px 0',
+          alignItems: 'center',
+          position: 'sticky',
+          bottom: 0,
+        }}
+        className={hasSelected ? 'checkoutRow--checked' : 'checkoutRow--uncheck'}
+      >
+        <Col offset={3}>
           <Button type='primary' onClick={handleBuyAction} disabled={!hasSelected}>
             Buy
           </Button>

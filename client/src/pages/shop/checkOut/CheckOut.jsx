@@ -74,12 +74,12 @@ const CheckOut = ({
       dataIndex: 'title',
       key: 'title',
       render: (_, record) => (
-        <Space>
+        <Space style={{ overflow: 'hidden', whiteSpace: 'nowrap' }}>
           <p>{record.title}</p>
         </Space>
       ),
     },
-    { title: 'Unit Price($)', dataIndex: 'price', key: 'unitPrice' },
+    { title: 'Unit Price($)', dataIndex: 'price', key: 'unitPrice', width: '100px' },
     {
       title: 'Quantity',
       key: 'quantity',
@@ -94,6 +94,7 @@ const CheckOut = ({
         const totalPrice = (record.quantity * record.price).toFixed(2)
         return <span>{totalPrice}</span>
       },
+      width: '100px' 
     },
   ]
   return (
@@ -119,10 +120,10 @@ const CheckOut = ({
           columns={columns}
           pagination={false}
           scroll={{
-            y: 240,
+            y: '249px',
           }}
         />
-        <span>{`Total: ${total}$`}</span>
+        <span>{`Total: ${total.toFixed(2)}$`}</span>
       </div>
     </Modal>
   )

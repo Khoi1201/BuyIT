@@ -38,6 +38,7 @@ const ChangeTab = () => {
   const [currentTab, setCurrentTab] = useState()
   const [showDetailModal, setShowDetailModal] = useState(false)
   const [id, setId] = useState()
+  const [selectedRowKeys, setSelectedRowKeys] = useState([])
 
   const cart = useSelector((state) => state.store.cart)
 
@@ -52,13 +53,35 @@ const ChangeTab = () => {
   const renderSwitch = (tabName) => {
     switch (tabName) {
       case 'shop':
-        return <Shop allProducts={allProducts} />
+        return (
+          <Shop
+            allProducts={allProducts}
+            setCurrentTab={setCurrentTab}
+            selectedRowKeys={selectedRowKeys}
+            setSelectedRowKeys={setSelectedRowKeys}
+            count={cart.length}
+          />
+        )
       case 'cart':
         return (
-          <Cart setId={setId} setShowDetailModal={setShowDetailModal} allProducts={allProducts} />
+          <Cart
+            setId={setId}
+            setShowDetailModal={setShowDetailModal}
+            allProducts={allProducts}
+            selectedRowKeys={selectedRowKeys}
+            setSelectedRowKeys={setSelectedRowKeys}
+          />
         )
       default:
-        return <Shop allProducts={allProducts} />
+        return (
+          <Shop
+            allProducts={allProducts}
+            setCurrentTab={setCurrentTab}
+            selectedRowKeys={selectedRowKeys}
+            setSelectedRowKeys={setSelectedRowKeys}
+            count={cart.length}
+          />
+        )
     }
   }
 

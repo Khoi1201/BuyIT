@@ -3,3 +3,11 @@
     justify-content: center;
     align-items: center;
 }
+
+.checkoutRow--checked {
+    background-color: #96b4cd;
+}
+
+.checkoutRow--uncheck {
+    background-color: #fff;
+}
