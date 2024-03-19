@@ -1,11 +1,14 @@
-import { Button, Image, InputNumber, Space, Table } from 'antd'
-import React from 'react'
+import { Button, Col, Image, InputNumber, Row, Space, Table } from 'antd'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { loadCart, removeFromCart, updateCartQuantity } from '../../redux/slice/store.slice'
+import { removeFromCart, updateCartQuantity } from '../../redux/slice/store.slice'
+import CheckOut from './checkOut/CheckOut'
 
-const Cart = ({ setId, setShowDetailModal, allProducts }) => {
+const Cart = ({ setId, setShowDetailModal, allProducts ,selectedRowKeys,setSelectedRowKeys}) => {
   const dispatch = useDispatch()
   const cartItems = useSelector((state) => state.store.cart)
+  const [total, setTotal] = useState(0)
+  const [showCheckout, setShowCheckout] = useState(false)
 
   const dataSource = cartItems.map((item, i) => {
     let temp = allProducts.find((product) => product._id === item.id)
@@ -19,8 +22,39 @@ const Cart = ({ setId, setShowDetailModal, allProducts }) => {
     }
   })
 
-  const removeItem = (id) => {
+  useEffect(() => {
+    setTotal(
+      dataSource
+        .filter((_, i) => selectedRowKeys.includes(i))
+        .reduce((accumulator, curr) => accumulator + curr.quantity * curr.price, 0)
+    )
+  }, [cartItems, selectedRowKeys, total, dataSource])
+
+  const handleBuyAction = () => {
+    setShowCheckout(true)
+  }
+
+  const onSelectChange = (newSelectedRowKeys) => {
+    setSelectedRowKeys(newSelectedRowKeys)
+  }
+
+  const rowSelection = {
+    selectedRowKeys,
+    onChange: onSelectChange,
+  }
+
+  const hasSelected = selectedRowKeys.length > 0
+
+  const removeItem = (id, i) => {
     dispatch(removeFromCart(id))
+    let temp = selectedRowKeys.filter((key) => key !== i)
+    setSelectedRowKeys(
+      temp.map((value, j) => {
+        if (j >= i) {
+          return value - 1
+        } else return value
+      })
+    )
   }
 
   const updateQuantity = (id, value) => {
@@ -89,7 +123,8 @@ const Cart = ({ setId, setShowDetailModal, allProducts }) => {
       title: 'Total Price($)',
       key: 'totalPrice',
       render: (_, record) => {
-        return <span>{(record.quantity * record.price).toFixed(2)}</span>
+        const totalPrice = (record.quantity * record.price).toFixed(2)
+        return <span>{totalPrice}</span>
       },
     },
     {
@@ -101,7 +136,7 @@ const Cart = ({ setId, setShowDetailModal, allProducts }) => {
       key: 'action',
       render: (_, record) => (
         <div className='center'>
-          <Button onClick={() => removeItem(record.id)}>Discard</Button>
+          <Button onClick={() => removeItem(record.id, record.key)}>Discard</Button>
         </div>
       ),
     },
@@ -109,7 +144,44 @@ const Cart = ({ setId, setShowDetailModal, allProducts }) => {
 
   return (
     <div style={{ maxWidth: '80%', margin: 'auto' }}>
-      <Table dataSource={dataSource} columns={columns} />
+      {showCheckout && (
+        <CheckOut
+          showCheckout={showCheckout}
+          setShowCheckout={() => setShowCheckout(false)}
+          items={cartItems.filter((_, i) => selectedRowKeys.includes(i))}
+          total={total}
+          setSelectedRowKeys={setSelectedRowKeys}
+          allProducts={allProducts}
+        />
+      )}
+      <Table dataSource={dataSource} columns={columns} rowSelection={rowSelection} />
+      <Row
+        style={{
+
+          padding: '30px 0',
+          alignItems: 'center',
+          position: 'sticky',
+          bottom: 0,
+        }}
+        className={hasSelected ? 'checkoutRow--checked' : 'checkoutRow--uncheck'}
+      >
+        <Col offset={3}>
+          <Button type='primary' onClick={handleBuyAction} disabled={!hasSelected}>
+            Buy
+          </Button>
+        </Col>
+        <Col>
+          <span
+            style={{
+              marginLeft: 8,
+            }}
+          >
+            {hasSelected
+              ? `Selected ${selectedRowKeys.length} items, total ${total.toFixed(2)}`
+              : ''}
+          </span>
+        </Col>
+      </Row>
     </div>
   )
 }

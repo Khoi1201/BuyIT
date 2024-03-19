@@ -18,10 +18,8 @@ const headerStyle = {
   paddingTop: '10px',
 }
 const contentStyle = {
-  paddingTop: '10px',
+  padding: '20px 0',
   textAlign: 'center',
-  color: '#fff',
-  backgroundColor: '#0958d9',
 }
 const footerStyle = {
   textAlign: 'center',
@@ -40,6 +38,7 @@ const ChangeTab = () => {
   const [currentTab, setCurrentTab] = useState()
   const [showDetailModal, setShowDetailModal] = useState(false)
   const [id, setId] = useState()
+  const [selectedRowKeys, setSelectedRowKeys] = useState([])
 
   const cart = useSelector((state) => state.store.cart)
 
@@ -54,13 +53,35 @@ const ChangeTab = () => {
   const renderSwitch = (tabName) => {
     switch (tabName) {
       case 'shop':
-        return <Shop allProducts={allProducts} />
+        return (
+          <Shop
+            allProducts={allProducts}
+            setCurrentTab={setCurrentTab}
+            selectedRowKeys={selectedRowKeys}
+            setSelectedRowKeys={setSelectedRowKeys}
+            count={cart.length}
+          />
+        )
       case 'cart':
         return (
-          <Cart setId={setId} setShowDetailModal={setShowDetailModal} allProducts={allProducts} />
+          <Cart
+            setId={setId}
+            setShowDetailModal={setShowDetailModal}
+            allProducts={allProducts}
+            selectedRowKeys={selectedRowKeys}
+            setSelectedRowKeys={setSelectedRowKeys}
+          />
         )
       default:
-        return <Shop allProducts={allProducts} />
+        return (
+          <Shop
+            allProducts={allProducts}
+            setCurrentTab={setCurrentTab}
+            selectedRowKeys={selectedRowKeys}
+            setSelectedRowKeys={setSelectedRowKeys}
+            count={cart.length}
+          />
+        )
     }
   }
 
@@ -116,7 +137,7 @@ const ChangeTab = () => {
         )}
       </Content>
 
-      <Footer style={footerStyle}>Copy right © by Khoi1203-3/2024 </Footer>
+      <Footer style={footerStyle}>Copyright © by Khoi1203-3/2024 </Footer>
     </Layout>
   )
 }
