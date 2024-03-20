@@ -1,12 +1,12 @@
 import { ShoppingCartOutlined, ShoppingOutlined } from '@ant-design/icons'
 import { Card, Image, List } from 'antd'
 import Meta from 'antd/es/card/Meta'
-import { useContext } from 'react'
+import { useContext, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import ThemeContext from '../../context/themeContext'
 import { addToCart } from '../../redux/slice/store.slice'
 
-const Shop = ({ allProducts, setCurrentTab, selectedRowKeys, setSelectedRowKeys, count }) => {
+const Shop = ({ allProducts, setCurrentTab, selectedRowKeys, setSelectedRowKeys, cart }) => {
   const dispatch = useDispatch()
   const theme = useContext(ThemeContext)
 
@@ -47,9 +47,11 @@ const Shop = ({ allProducts, setCurrentTab, selectedRowKeys, setSelectedRowKeys,
               <ShoppingOutlined
                 key='buy'
                 onClick={() => {
-                  handleAddToCart(product._id)
-                  setCurrentTab('cart')
-                  setSelectedRowKeys(selectedRowKeys.concat(count))
+                  if (!cart.map((item) => item.id).includes(product._id)) {
+                    handleAddToCart(product._id)
+                    setCurrentTab('cart')
+                    setSelectedRowKeys(selectedRowKeys.concat(cart.length))
+                  }
                 }}
               />,
             ]}

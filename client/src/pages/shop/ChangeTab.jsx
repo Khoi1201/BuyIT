@@ -59,7 +59,7 @@ const ChangeTab = () => {
             setCurrentTab={setCurrentTab}
             selectedRowKeys={selectedRowKeys}
             setSelectedRowKeys={setSelectedRowKeys}
-            count={cart.length}
+            cart={cart}
           />
         )
       case 'cart':
@@ -79,7 +79,7 @@ const ChangeTab = () => {
             setCurrentTab={setCurrentTab}
             selectedRowKeys={selectedRowKeys}
             setSelectedRowKeys={setSelectedRowKeys}
-            count={cart.length}
+            cart={cart}
           />
         )
     }

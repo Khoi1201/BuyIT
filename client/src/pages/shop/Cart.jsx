@@ -4,11 +4,15 @@ import { useDispatch, useSelector } from 'react-redux'
 import { removeFromCart, updateCartQuantity } from '../../redux/slice/store.slice'
 import CheckOut from './checkOut/CheckOut'
 
-const Cart = ({ setId, setShowDetailModal, allProducts ,selectedRowKeys,setSelectedRowKeys}) => {
+const Cart = ({ setId, setShowDetailModal, allProducts, selectedRowKeys, setSelectedRowKeys }) => {
   const dispatch = useDispatch()
   const cartItems = useSelector((state) => state.store.cart)
   const [total, setTotal] = useState(0)
   const [showCheckout, setShowCheckout] = useState(false)
+
+  useEffect(() => {
+    console.log(selectedRowKeys)
+  }, [selectedRowKeys])
 
   const dataSource = cartItems.map((item, i) => {
     let temp = allProducts.find((product) => product._id === item.id)
@@ -47,14 +51,16 @@ const Cart = ({ setId, setShowDetailModal, allProducts ,selectedRowKeys,setSelec
 
   const removeItem = (id, i) => {
     dispatch(removeFromCart(id))
+    console.log(id, i)
     let temp = selectedRowKeys.filter((key) => key !== i)
-    setSelectedRowKeys(
-      temp.map((value, j) => {
-        if (j >= i) {
-          return value - 1
-        } else return value
-      })
-    )
+    temp = temp.map((key) => {
+      console.log(key, i)
+      if (key >= i) {
+        return key - 1
+      } else return key
+    })
+
+    setSelectedRowKeys(temp)
   }
 
   const updateQuantity = (id, value) => {
@@ -157,7 +163,6 @@ const Cart = ({ setId, setShowDetailModal, allProducts ,selectedRowKeys,setSelec
       <Table dataSource={dataSource} columns={columns} rowSelection={rowSelection} />
       <Row
         style={{
-
           padding: '30px 0',
           alignItems: 'center',
           position: 'sticky',
