@@ -10,10 +10,6 @@ const Cart = ({ setId, setShowDetailModal, allProducts, selectedRowKeys, setSele
   const [total, setTotal] = useState(0)
   const [showCheckout, setShowCheckout] = useState(false)
 
-  useEffect(() => {
-    console.log(selectedRowKeys)
-  }, [selectedRowKeys])
-
   const dataSource = cartItems.map((item, i) => {
     let temp = allProducts.find((product) => product._id === item.id)
     return {
@@ -51,10 +47,8 @@ const Cart = ({ setId, setShowDetailModal, allProducts, selectedRowKeys, setSele
 
   const removeItem = (id, i) => {
     dispatch(removeFromCart(id))
-    console.log(id, i)
     let temp = selectedRowKeys.filter((key) => key !== i)
     temp = temp.map((key) => {
-      console.log(key, i)
       if (key >= i) {
         return key - 1
       } else return key
