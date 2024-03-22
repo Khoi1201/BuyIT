@@ -26,14 +26,14 @@ router.get('/', verifyToken, async (req, res) => {
 // @access public
 
 router.post('/register', async (req, res) => {
-  const { username, password } = req.body.payload
-
-  // simple validation
-  if (!(username || password)) {
-    return res.status(400).json({ success: false, message: 'Missing username and/or password' })
-  }
-
   try {
+    const { username, password } = req.body.payload
+
+    // simple validation
+    if (!(username || password)) {
+      return res.status(400).json({ success: false, message: 'Missing username and/or password' })
+    }
+
     // check for existing user
     const user = await User.findOne({ username })
     if (user) return res.status(400).json({ success: false, message: 'Username already exist' })
@@ -58,14 +58,14 @@ router.post('/register', async (req, res) => {
 // @access public
 
 router.post('/login', async (req, res) => {
-  const { username, password } = req.body.payload
-
-  // simple validation
-  if (!(username || password)) {
-    return res.status(400).json({ success: false, message: 'Missing username and/or password' })
-  }
-
   try {
+    const { username, password } = req.body.payload
+
+    // simple validation
+    if (!(username || password)) {
+      return res.status(400).json({ success: false, message: 'Missing username and/or password' })
+    }
+
     // check for existing user
     const user = await User.findOne({ username })
     if (!user) {

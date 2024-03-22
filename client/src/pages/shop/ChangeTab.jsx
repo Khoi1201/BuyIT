@@ -5,7 +5,7 @@ import { Avatar, Badge, Col, Layout, Row } from 'antd'
 import { Content, Footer, Header } from 'antd/es/layout/layout'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { getAllProducts, loadCart } from '../../redux/slice/store.slice'
 import Shop from './Shop'
 import Cart from './Cart'
@@ -31,11 +31,11 @@ const layoutStyle = {
   minHeight: '100vh',
 }
 
-const ChangeTab = () => {
+const ChangeTab = ({ tab }) => {
   const dispatch = useDispatch()
+  const navigate = useNavigate()
   const allProducts = useSelector((state) => state.store.allProducts)
 
-  const [currentTab, setCurrentTab] = useState()
   const [showDetailModal, setShowDetailModal] = useState(false)
   const [id, setId] = useState()
   const [selectedRowKeys, setSelectedRowKeys] = useState([])
@@ -43,11 +43,11 @@ const ChangeTab = () => {
   const cart = useSelector((state) => state.store.cart)
 
   useEffect(() => {
-    dispatch(loadCart())
+    dispatch(getAllProducts())
   }, [])
 
   useEffect(() => {
-    dispatch(getAllProducts())
+    dispatch(loadCart())
   }, [])
 
   const renderSwitch = (tabName) => {
@@ -56,7 +56,6 @@ const ChangeTab = () => {
         return (
           <Shop
             allProducts={allProducts}
-            setCurrentTab={setCurrentTab}
             selectedRowKeys={selectedRowKeys}
             setSelectedRowKeys={setSelectedRowKeys}
             cart={cart}
@@ -76,7 +75,6 @@ const ChangeTab = () => {
         return (
           <Shop
             allProducts={allProducts}
-            setCurrentTab={setCurrentTab}
             selectedRowKeys={selectedRowKeys}
             setSelectedRowKeys={setSelectedRowKeys}
             cart={cart}
@@ -93,7 +91,7 @@ const ChangeTab = () => {
             <p
               style={{ cursor: 'pointer' }}
               onClick={() => {
-                setCurrentTab('shop')
+                navigate('/')
               }}
             >
               Shopping at ease!
@@ -114,7 +112,7 @@ const ChangeTab = () => {
                   icon={<ShoppingFilled style={{ color: 'white' }} />}
                   style={{ cursor: 'pointer' }}
                   onClick={() => {
-                    setCurrentTab('cart')
+                    navigate('/cart')
                   }}
                 />
               </Badge>
@@ -127,7 +125,7 @@ const ChangeTab = () => {
       </Header>
 
       <Content style={contentStyle}>
-        {renderSwitch(currentTab)}
+        {renderSwitch(tab)}
         {id && (
           <ModalDetail
             setShowDetailModal={setShowDetailModal}

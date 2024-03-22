@@ -5,10 +5,13 @@ import { useContext, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import ThemeContext from '../../context/themeContext'
 import { addToCart } from '../../redux/slice/store.slice'
+import { useNavigate } from 'react-router-dom'
 
-const Shop = ({ allProducts, setCurrentTab, selectedRowKeys, setSelectedRowKeys, cart }) => {
+const Shop = ({ allProducts, selectedRowKeys, setSelectedRowKeys, cart }) => {
   const dispatch = useDispatch()
   const theme = useContext(ThemeContext)
+
+  const navigate = useNavigate()
 
   const handleAddToCart = (id) => {
     dispatch(addToCart(id))
@@ -49,7 +52,7 @@ const Shop = ({ allProducts, setCurrentTab, selectedRowKeys, setSelectedRowKeys,
                 onClick={() => {
                   if (!cart.map((item) => item.id).includes(product._id)) {
                     handleAddToCart(product._id)
-                    setCurrentTab('cart')
+                    navigate('/cart')
                     setSelectedRowKeys(selectedRowKeys.concat(cart.length))
                   }
                 }}

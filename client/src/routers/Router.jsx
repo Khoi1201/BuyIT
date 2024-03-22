@@ -30,7 +30,8 @@ const Router = () => {
       <BrowserRouter>
         <NotificationBar />
         <Routes>
-          <Route path='/' element={<ChangeTab />} />
+          <Route path='/' element={<ChangeTab tab='shop' />} />
+          <Route path='/cart' element={<ChangeTab tab='cart' />} />
           <Route path='/login' element={<Auth authRoute='login' mem={mem} />} />
           <Route path='/register' element={<Auth authRoute='register' />} />
           <Route

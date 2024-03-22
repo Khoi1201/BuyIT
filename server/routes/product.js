@@ -9,13 +9,13 @@ const Product = require('../models/Product')
 // @access Private
 
 router.post('/', verifyToken, async (req, res) => {
-  const { title, price, description, url } = req?.body?.payload
-
-  // Simple validation
-  if (!title || !price)
-    return res.status(400).json({ success: false, message: 'Title and price are required' })
-
   try {
+    const { title, price, description, url } = req?.body?.payload
+
+    // Simple validation
+    if (!title || !price)
+      return res.status(400).json({ success: false, message: 'Title and price are required' })
+
     const newProduct = new Product({
       title,
       price,
@@ -63,19 +63,20 @@ router.get('/store', async (req, res) => {
 // @access Private
 
 router.put('/:productId', verifyToken, async (req, res) => {
-  const { title, price, description, url } = req.body.payload
-
-  // Simple validation
-  if (!title || !price)
-    return res.status(400).json({ success: false, message: 'Title and price are required' })
-
   try {
+    const { title, price, description, url, quantity = 0 } = req.body.payload
+
+    // Simple validation
+    if (!title || !price)
+      return res.status(400).json({ success: false, message: 'Title and price are required' })
+
     let updatedProduct = {
       title,
       price,
       description,
       url: url.startsWith('https://') || url.startsWith('http://') ? url : `https://${url}`,
       user: req.userId,
+      quantity,
     }
 
     const productUpdateCondition = { _id: req.params.productId, user: req.userId }

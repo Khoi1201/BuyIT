@@ -1,5 +1,5 @@
 import { Button, Col, Image, InputNumber, Row, Space, Table } from 'antd'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { removeFromCart, updateCartQuantity } from '../../redux/slice/store.slice'
 import CheckOut from './checkOut/CheckOut'
@@ -9,18 +9,24 @@ const Cart = ({ setId, setShowDetailModal, allProducts, selectedRowKeys, setSele
   const cartItems = useSelector((state) => state.store.cart)
   const [total, setTotal] = useState(0)
   const [showCheckout, setShowCheckout] = useState(false)
+  const [dataSource, setDataSource] = useState([])
 
-  const dataSource = cartItems.map((item, i) => {
-    let temp = allProducts.find((product) => product._id === item.id)
-    return {
-      id: item.id,
-      key: i,
-      url: temp.url,
-      title: temp.title,
-      price: temp.price,
-      quantity: item.quantity,
-    }
-  })
+  useEffect(() => {
+    setDataSource(
+      cartItems.map((item, i) => {
+        let temp = allProducts.find((product) => product._id === item.id)
+        return {
+          id: item.id,
+          key: i,
+          url: temp?.url,
+          title: temp?.title,
+          price: temp?.price,
+          quantity: item?.quantity,
+        }
+      })
+    )
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [allProducts])
 
   useEffect(() => {
     setTotal(
@@ -28,7 +34,7 @@ const Cart = ({ setId, setShowDetailModal, allProducts, selectedRowKeys, setSele
         .filter((_, i) => selectedRowKeys.includes(i))
         .reduce((accumulator, curr) => accumulator + curr.quantity * curr.price, 0)
     )
-  }, [cartItems, selectedRowKeys, total, dataSource])
+  }, [cartItems, selectedRowKeys, dataSource])
 
   const handleBuyAction = () => {
     setShowCheckout(true)
