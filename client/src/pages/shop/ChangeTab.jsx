@@ -64,6 +64,7 @@ const ChangeTab = ({ tab }) => {
       case 'cart':
         return (
           <Cart
+          cart={cart}
             setId={setId}
             setShowDetailModal={setShowDetailModal}
             allProducts={allProducts}
