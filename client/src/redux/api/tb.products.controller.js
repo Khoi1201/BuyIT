@@ -6,11 +6,6 @@ const tbProductController = {
     return axiosCustom.get(url, {})
   },
 
-  getAllProducts() {
-    const url = '/products/store'
-    return axiosCustom.get(url, {})
-  },
-
   addProduct(payload) {
     const url = '/products'
     return axiosCustom.post(url, { payload })

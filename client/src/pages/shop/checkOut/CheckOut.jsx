@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Button, Col, Image, InputNumber, Modal, Row, Space, Table } from 'antd'
 import { useDispatch } from 'react-redux'
-import { removeFromCart } from '../../../redux/slice/store.slice'
+import { placeOrder, removeFromCart } from '../../../redux/slice/store.slice'
 
 const CheckOut = ({
   items,
@@ -36,7 +36,7 @@ const CheckOut = ({
 
     setTimeout(() => {
       // call server to make a purchase
-      console.log(items) // give this to server
+      dispatch(placeOrder(items))
 
       // clear cart
       items.map((item) => dispatch(removeFromCart(item.id)))
