@@ -63,7 +63,10 @@ router.put('/:orderId/:itemId', verifyToken, async (req, res) => {
 
     updateOrder.listOfProduct.forEach((element, index) => {
       if (element.id === req.params.itemId) {
-        updateOrder.listOfProduct[index] = { ...updateOrder[index], state: state }
+        updateOrder.listOfProduct[index] = {
+          ...updateOrder.listOfProduct[index].toObject(),
+          state: state,
+        }
       }
     })
 
