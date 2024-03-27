@@ -5,6 +5,32 @@ const verifyToken = require('../middleware/auth')
 const Order = require('../models/Order')
 const Product = require('../models/Product')
 
+router.get('/', verifyToken, async (req, res) => {
+  try {
+    // find product of user
+    const products = await Product.find({ user: req.userId })
+    const tempArray = products.map((product) => product._id)
+
+    // find the order compare and get the intersection
+    const tempOrders = await Order.find({
+      listOfProduct: { $elemMatch: { id: { $in: tempArray } } },
+    })
+
+    // filter user list of product
+    const orders = tempOrders.map((order) => {
+      const temp = order.listOfProduct.filter((orderItem) => {
+        return tempArray.toString().includes(orderItem.id.toString())
+      })
+      return { ...order.toObject(), listOfProduct: temp }
+    })
+
+    // return intersection with order id
+    res.json(orders)
+  } catch (error) {
+    console.log(error)
+  }
+})
+
 // @route POST api/order
 // @desc Create order
 // @access Public
@@ -38,12 +64,6 @@ router.put('/:orderId/:itemId', verifyToken, async (req, res) => {
 
     if (!state) return res.status(400).json({ success: false, message: 'Missing state' })
 
-    // let updateOrderCondition = {
-    //   _id: req.params.orderId,
-    //   id: req.params.productId,
-    //   user: req.userId,
-    // }
-
     const orderProduct = await Product.find({
       user: req.userId,
       _id: req.params.itemId,
@@ -62,7 +82,7 @@ router.put('/:orderId/:itemId', verifyToken, async (req, res) => {
     }
 
     updateOrder.listOfProduct.forEach((element, index) => {
-      if (element.id === req.params.itemId) {
+      if (element.id.toString() === req.params.itemId) {
         updateOrder.listOfProduct[index] = {
           ...updateOrder.listOfProduct[index].toObject(),
           state: state,
