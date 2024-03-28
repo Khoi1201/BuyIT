@@ -5,6 +5,7 @@ import Cookies from 'js-cookie'
 
 export const initialState = {
   products: [],
+  orders: [],
   status: 'idle',
 }
 
@@ -44,6 +45,15 @@ export const deleteProduct = createAsyncThunk('deleteProduct', async (id, { reje
     return response.data
   } catch (error) {
     return rejectWithValue(error.response.data)
+  }
+})
+
+export const getOrders = createAsyncThunk('getOrders', async () => {
+  try {
+    const response = await tbProductController.getOrders()
+    return response.data
+  } catch (error) {
+    console.log(error)
   }
 })
 
@@ -95,6 +105,18 @@ export const productSlice = createSlice({
     })
     builder.addCase(deleteProduct.rejected, (state) => {
       state.deleteProductStatus = 'failed'
+    })
+
+    //get order
+    builder.addCase(getOrders.pending, (state) => {
+      state.getOrdersState = 'loading'
+    })
+    builder.addCase(getOrders.fulfilled, (state, action) => {
+      state.getOrdersState = 'success'
+      state.orders = action.payload
+    })
+    builder.addCase(getOrders.rejected, (state) => {
+      state.getOrdersState = 'failed'
     })
   },
 })

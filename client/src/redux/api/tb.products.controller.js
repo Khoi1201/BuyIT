@@ -12,13 +12,18 @@ const tbProductController = {
   },
 
   updateProduct(payload) {
-    const url = 'products'
+    const url = '/products'
     return axiosCustom.put(url + `/${payload.id}`, { payload })
   },
 
   deleteProduct(id) {
     const url = '/products'
     return axiosCustom.delete(url + `/${id}`)
+  },
+
+  getOrders() {
+    const url = '/order'
+    return axiosCustom.get(url)
   },
 }
 

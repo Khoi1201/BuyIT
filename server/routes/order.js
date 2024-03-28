@@ -5,6 +5,10 @@ const verifyToken = require('../middleware/auth')
 const Order = require('../models/Order')
 const Product = require('../models/Product')
 
+// @route GET api/order
+// @desc Get order
+// @access Private
+
 router.get('/', verifyToken, async (req, res) => {
   try {
     // find product of user
@@ -12,17 +16,23 @@ router.get('/', verifyToken, async (req, res) => {
     const tempArray = products.map((product) => product._id)
 
     // find the order compare and get the intersection
-    const tempOrders = await Order.find({
-      listOfProduct: { $elemMatch: { id: { $in: tempArray } } },
-    })
+    const orders = await Order.find(
+      {
+        listOfProduct: { $elemMatch: { id: { $in: tempArray } } },
+      },
+      {
+        listOfProduct: {
+          $filter: {
+            input: '$listOfProduct',
+            as: 'product',
+            cond: { $in: ['$$product.id', tempArray] },
+          },
+        },
+        createdAt: 1,
+      }
+    )
 
-    // filter user list of product
-    const orders = tempOrders.map((order) => {
-      const temp = order.listOfProduct.filter((orderItem) => {
-        return tempArray.toString().includes(orderItem.id.toString())
-      })
-      return { ...order.toObject(), listOfProduct: temp }
-    })
+    console.log(orders)
 
     // return intersection with order id
     res.json(orders)
@@ -47,6 +57,7 @@ router.post('/', async (req, res) => {
 
     const newOrder = new Order({ listOfProduct: orderAddedState })
     await newOrder.save()
+
     res.json({ success: true, message: 'Ordering success', order: newOrder })
   } catch (error) {
     console.log(error)

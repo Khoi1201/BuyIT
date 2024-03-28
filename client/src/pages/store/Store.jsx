@@ -197,7 +197,7 @@ const Store = ({ setSelectTab }) => {
                         : product.description
                     }
                   />
-                  <div className='center' style={{ justifyContent: 'space-between' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                     <span>Price: {product.price} $</span>
                     <span>In Stock: {product.quantity}</span>
                   </div>
