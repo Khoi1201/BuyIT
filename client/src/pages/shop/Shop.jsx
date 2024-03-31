@@ -1,14 +1,32 @@
 import { ShoppingCartOutlined, ShoppingOutlined } from '@ant-design/icons'
 import { Card, Image, List } from 'antd'
 import Meta from 'antd/es/card/Meta'
-import { useContext } from 'react'
-import { useDispatch } from 'react-redux'
+import { useContext, useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import ThemeContext from '../../context/themeContext'
 import { addToCart } from '../../redux/slice/store.slice'
+import { useNavigate } from 'react-router-dom'
 
-const Shop = ({ allProducts, setCurrentTab, selectedRowKeys, setSelectedRowKeys, count }) => {
+const Shop = ({ allProducts, selectedRowKeys, setSelectedRowKeys, cart, searchQuery }) => {
   const dispatch = useDispatch()
   const theme = useContext(ThemeContext)
+  const navigate = useNavigate()
+  const searchProducts = useSelector((state) => state.store.searchProducts)
+  const [dataSource, setDataSource] = useState([])
+
+  useEffect(() => {
+    setDataSource(
+      searchQuery
+        ? searchProducts.length
+          ? allProducts.filter((item) =>
+              searchProducts.find((product) => {
+                return product._id === item._id
+              })
+            )
+          : []
+        : allProducts
+    )
+  }, [searchQuery, allProducts, searchProducts, setDataSource])
 
   const handleAddToCart = (id) => {
     dispatch(addToCart(id))
@@ -21,7 +39,7 @@ const Shop = ({ allProducts, setCurrentTab, selectedRowKeys, setSelectedRowKeys,
         gutter: 16,
         column: 3,
       }}
-      dataSource={allProducts}
+      dataSource={dataSource}
       renderItem={(product) => (
         <List.Item>
           <Card
@@ -47,9 +65,11 @@ const Shop = ({ allProducts, setCurrentTab, selectedRowKeys, setSelectedRowKeys,
               <ShoppingOutlined
                 key='buy'
                 onClick={() => {
-                  handleAddToCart(product._id)
-                  setCurrentTab('cart')
-                  setSelectedRowKeys(selectedRowKeys.concat(count))
+                  if (!cart.map((item) => item.id).includes(product._id)) {
+                    handleAddToCart(product._id)
+                    navigate('/cart')
+                    setSelectedRowKeys(selectedRowKeys.concat(cart.length))
+                  }
                 }}
               />,
             ]}
