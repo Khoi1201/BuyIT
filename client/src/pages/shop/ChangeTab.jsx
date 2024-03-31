@@ -116,6 +116,7 @@ const ChangeTab = ({ tab }) => {
               style={{ cursor: 'pointer' }}
               onClick={() => {
                 navigate('/')
+                setSearchQuery('')
               }}
             >
               Shopping at ease!
