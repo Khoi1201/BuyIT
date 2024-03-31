@@ -47,6 +47,9 @@ const ModalUpdateProduct = ({
         <Form.Item label='Image url' name='url' required>
           <Input />
         </Form.Item>
+        <Form.Item label='Quantity' name='quantity' required>
+          <InputNumber min={0} max={999}/>
+        </Form.Item>
       </Form>
     </Modal>
   )

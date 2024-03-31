@@ -1,26 +1,39 @@
 import { Button, Col, Image, InputNumber, Row, Space, Table } from 'antd'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { removeFromCart, updateCartQuantity } from '../../redux/slice/store.slice'
 import CheckOut from './checkOut/CheckOut'
 
-const Cart = ({ setId, setShowDetailModal, allProducts ,selectedRowKeys,setSelectedRowKeys}) => {
+const Cart = ({
+  cart,
+  setId,
+  setShowDetailModal,
+  allProducts,
+  selectedRowKeys,
+  setSelectedRowKeys,
+}) => {
   const dispatch = useDispatch()
-  const cartItems = useSelector((state) => state.store.cart)
   const [total, setTotal] = useState(0)
   const [showCheckout, setShowCheckout] = useState(false)
+  const [dataSource, setDataSource] = useState([])
 
-  const dataSource = cartItems.map((item, i) => {
-    let temp = allProducts.find((product) => product._id === item.id)
-    return {
-      id: item.id,
-      key: i,
-      url: temp.url,
-      title: temp.title,
-      price: temp.price,
-      quantity: item.quantity,
+  useEffect(() => {
+    if (allProducts && cart) {
+      setDataSource(
+        cart.map((item, i) => {
+          let temp = allProducts.find((product) => product._id === item.id)
+          return {
+            id: item.id,
+            key: i,
+            url: temp?.url,
+            title: temp?.title,
+            price: temp?.price,
+            quantity: item.quantity,
+          }
+        })
+      )
     }
-  })
+  }, [allProducts, cart])
 
   useEffect(() => {
     setTotal(
@@ -28,7 +41,7 @@ const Cart = ({ setId, setShowDetailModal, allProducts ,selectedRowKeys,setSelec
         .filter((_, i) => selectedRowKeys.includes(i))
         .reduce((accumulator, curr) => accumulator + curr.quantity * curr.price, 0)
     )
-  }, [cartItems, selectedRowKeys, total, dataSource])
+  }, [cart, selectedRowKeys, dataSource])
 
   const handleBuyAction = () => {
     setShowCheckout(true)
@@ -48,13 +61,13 @@ const Cart = ({ setId, setShowDetailModal, allProducts ,selectedRowKeys,setSelec
   const removeItem = (id, i) => {
     dispatch(removeFromCart(id))
     let temp = selectedRowKeys.filter((key) => key !== i)
-    setSelectedRowKeys(
-      temp.map((value, j) => {
-        if (j >= i) {
-          return value - 1
-        } else return value
-      })
-    )
+    temp = temp.map((key) => {
+      if (key >= i) {
+        return key - 1
+      } else return key
+    })
+
+    setSelectedRowKeys(temp)
   }
 
   const updateQuantity = (id, value) => {
@@ -62,65 +75,67 @@ const Cart = ({ setId, setShowDetailModal, allProducts ,selectedRowKeys,setSelec
   }
 
   const renderImage = (url) => (
-    <div className='center'>
+    <span>
       <Image
         preview={false}
         style={{ width: 50, height: 50, objectFit: 'cover' }}
         alt='cover'
         src={url}
       />
-    </div>
+    </span>
   )
 
   const columns = [
     {
-      title: (
-        <div className='center'>
-          <span>Image</span>
-        </div>
-      ),
+      title: <span>Image</span>,
       dataIndex: 'url',
       key: 'url',
       render: renderImage,
     },
     {
-      title: 'Name',
+      title: <span>Name</span>,
       dataIndex: 'title',
       key: 'title',
       render: (_, record) => (
-        <Space>
-          <p
-            style={{ cursor: 'pointer' }}
-            onClick={() => {
-              setId(record.id)
-              setShowDetailModal(true)
-            }}
-          >
-            {record.title}
-          </p>
-        </Space>
+        <span
+          style={{ cursor: 'pointer' }}
+          onClick={() => {
+            setId(record.id)
+            setShowDetailModal(true)
+          }}
+        >
+          {record.title}
+        </span>
       ),
     },
-    { title: 'Unit Price($)', dataIndex: 'price', key: 'unitPrice' },
     {
-      title: 'Quantity',
+      title: <span>Unit Price($)</span>,
+      dataIndex: 'price',
+      key: 'unitPrice',
+      render: (_, record) => <span>{record.price}</span>,
+    },
+    {
+      title: <span>Quantity</span>,
       key: 'quantity',
       render: (_, record) => {
         return (
-          <InputNumber
-            controls
-            max={20}
-            min={1}
-            defaultValue={record.quantity ? record.quantity : 1}
-            value={record.quantity ? record.quantity : 1}
-            precision={0}
-            onChange={(value) => updateQuantity(record.id, value)}
-          ></InputNumber>
+          <span>
+            <InputNumber
+              controls
+              max={20}
+              min={1}
+              defaultValue={record.quantity ? record.quantity : 1}
+              value={record.quantity ? record.quantity : 1}
+              precision={0}
+              onChange={(value) => updateQuantity(record.id, value)}
+              size={'large'}
+            ></InputNumber>
+          </span>
         )
       },
     },
     {
-      title: 'Total Price($)',
+      title: <span>Total Price($)</span>,
       key: 'totalPrice',
       render: (_, record) => {
         const totalPrice = (record.quantity * record.price).toFixed(2)
@@ -128,16 +143,12 @@ const Cart = ({ setId, setShowDetailModal, allProducts ,selectedRowKeys,setSelec
       },
     },
     {
-      title: (
-        <div className='center'>
-          <span>Action</span>
-        </div>
-      ),
+      title: <span>Action</span>,
       key: 'action',
       render: (_, record) => (
-        <div className='center'>
+        <span>
           <Button onClick={() => removeItem(record.id, record.key)}>Discard</Button>
-        </div>
+        </span>
       ),
     },
   ]
@@ -148,7 +159,7 @@ const Cart = ({ setId, setShowDetailModal, allProducts ,selectedRowKeys,setSelec
         <CheckOut
           showCheckout={showCheckout}
           setShowCheckout={() => setShowCheckout(false)}
-          items={cartItems.filter((_, i) => selectedRowKeys.includes(i))}
+          items={cart.filter((_, i) => selectedRowKeys.includes(i))}
           total={total}
           setSelectedRowKeys={setSelectedRowKeys}
           allProducts={allProducts}
@@ -157,7 +168,6 @@ const Cart = ({ setId, setShowDetailModal, allProducts ,selectedRowKeys,setSelec
       <Table dataSource={dataSource} columns={columns} rowSelection={rowSelection} />
       <Row
         style={{
-
           padding: '30px 0',
           alignItems: 'center',
           position: 'sticky',

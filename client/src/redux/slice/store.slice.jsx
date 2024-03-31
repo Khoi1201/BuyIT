@@ -1,16 +1,35 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import tbProductController from '../api/tb.products.controller'
+import shopController from '../api/shop.controller'
 
 export const initialState = {
   allProducts: [],
+  searchProducts: [],
   cart: [],
   status: 'idle',
 }
 
 export const getAllProducts = createAsyncThunk('getAllProducts', async () => {
   try {
-    const response = await tbProductController.getAllProducts()
+    const response = await shopController.getAllProducts()
     return response.data.allProducts
+  } catch (error) {
+    console.log(error)
+  }
+})
+
+export const searchProducts = createAsyncThunk('searchProducts', async (query) => {
+  try {
+    const response = await shopController.searchProduct(query)
+    return response.data.products
+  } catch (error) {
+    console.log(error)
+  }
+})
+
+export const placeOrder = createAsyncThunk('placeOrder', async (order) => {
+  try {
+    const response = await shopController.placeOrder(order)
+    return response.data.order
   } catch (error) {
     console.log(error)
   }
@@ -52,6 +71,18 @@ export const storeSlice = createSlice({
     })
     builder.addCase(getAllProducts.rejected, (state) => {
       state.status = 'failed'
+    })
+
+    //search products
+    builder.addCase(searchProducts.pending, (state) => {
+      state.searchStatus = 'loading'
+    })
+    builder.addCase(searchProducts.fulfilled, (state, action) => {
+      state.searchStatus = 'success'
+      state.searchProducts = action.payload
+    })
+    builder.addCase(searchProducts.rejected, (state) => {
+      state.searchStatus = 'failed'
     })
   },
 })

@@ -77,7 +77,8 @@ const Store = ({ setSelectTab }) => {
             data.description === updateProductData.description && // update product data is old data
             data.price === updateProductData.price &&
             data.title === updateProductData.title &&
-            data.url === updateProductData.url
+            data.url === updateProductData.url &&
+            data.quantity === updateProductData.quantity
           )
         )
       ) {
@@ -100,9 +101,7 @@ const Store = ({ setSelectTab }) => {
     setSelectTab('store')
   }, [])
 
-  useEffect(() => {
-    dispatch(getProducts())
-  }, [])
+
 
   return (
     <div>
@@ -196,7 +195,10 @@ const Store = ({ setSelectTab }) => {
                         : product.description
                     }
                   />
-                  <span>Price: {product.price} $</span>
+                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <span>Price: {product.price} $</span>
+                    <span>In Stock: {product.quantity}</span>
+                  </div>
                 </Card>
               </List.Item>
             )

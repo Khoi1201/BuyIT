@@ -1,13 +1,15 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { Navigate, Outlet, useLocation } from 'react-router-dom'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import Navbar from '../components/Navbar/Navbar'
 import { Content } from 'antd/es/layout/layout'
 import { Layout } from 'antd'
 import Sider from 'antd/es/layout/Sider'
 import ThemeContext from '../context/themeContext'
+import { getProducts } from '../redux/slice/product.slice'
 
 const ProtectedRoute = ({ selectTab, setSelectTab, setMem }) => {
+  const dispatch = useDispatch()
   const theme = useContext(ThemeContext)
   const authenticated = useSelector((state) => state.authentication.authenticated)
 
@@ -15,6 +17,9 @@ const ProtectedRoute = ({ selectTab, setSelectTab, setMem }) => {
 
   const location = useLocation()
   useEffect(() => setMem(location), [setMem])
+  useEffect(() => {
+    dispatch(getProducts())
+  }, [])
 
   return authenticated ? (
     <>

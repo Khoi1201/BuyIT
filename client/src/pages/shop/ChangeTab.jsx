@@ -5,11 +5,12 @@ import { Avatar, Badge, Col, Layout, Row } from 'antd'
 import { Content, Footer, Header } from 'antd/es/layout/layout'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
-import { getAllProducts, loadCart } from '../../redux/slice/store.slice'
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
+import { getAllProducts, loadCart, searchProducts } from '../../redux/slice/store.slice'
 import Shop from './Shop'
 import Cart from './Cart'
 import ModalDetail from '../../components/Modal/ModalDetail/ModalDetail'
+import Search from 'antd/es/input/Search'
 
 const headerStyle = {
   textAlign: 'center',
@@ -31,23 +32,43 @@ const layoutStyle = {
   minHeight: '100vh',
 }
 
-const ChangeTab = () => {
+const ChangeTab = ({ tab }) => {
   const dispatch = useDispatch()
-  const allProducts = useSelector((state) => state.store.allProducts)
+  const navigate = useNavigate()
+  const location = useLocation()
 
-  const [currentTab, setCurrentTab] = useState()
+  const query = new URLSearchParams(location.search).get('query') || ''
+  const allProducts = useSelector((state) => state.store.allProducts)
+  const searchStatus = useSelector((state) => state.store.searchStatus)
+  const cart = useSelector((state) => state.store.cart)
+
   const [showDetailModal, setShowDetailModal] = useState(false)
   const [id, setId] = useState()
   const [selectedRowKeys, setSelectedRowKeys] = useState([])
+  const [searchQuery, setSearchQuery] = useState([])
+  const [searchLoading, setSearchLoading] = useState(false)
 
-  const cart = useSelector((state) => state.store.cart)
+  const handleSearch = (value) => {
+    setSearchQuery(value)
+    dispatch(searchProducts(value))
+    value ? navigate(`?query=${value}`) : navigate('/')
+  }
 
   useEffect(() => {
-    dispatch(loadCart())
+    searchStatus === 'loading' ? setSearchLoading(true) : setSearchLoading(false)
+  }, [searchStatus])
+
+  useEffect(() => {
+    dispatch(searchProducts(query))
+    !query && navigate('/')
   }, [])
 
   useEffect(() => {
     dispatch(getAllProducts())
+  }, [])
+
+  useEffect(() => {
+    dispatch(loadCart())
   }, [])
 
   const renderSwitch = (tabName) => {
@@ -56,15 +77,16 @@ const ChangeTab = () => {
         return (
           <Shop
             allProducts={allProducts}
-            setCurrentTab={setCurrentTab}
             selectedRowKeys={selectedRowKeys}
             setSelectedRowKeys={setSelectedRowKeys}
-            count={cart.length}
+            cart={cart}
+            searchQuery={searchQuery}
           />
         )
       case 'cart':
         return (
           <Cart
+            cart={cart}
             setId={setId}
             setShowDetailModal={setShowDetailModal}
             allProducts={allProducts}
@@ -76,10 +98,10 @@ const ChangeTab = () => {
         return (
           <Shop
             allProducts={allProducts}
-            setCurrentTab={setCurrentTab}
             selectedRowKeys={selectedRowKeys}
             setSelectedRowKeys={setSelectedRowKeys}
-            count={cart.length}
+            cart={cart}
+            searchQuery={searchQuery}
           />
         )
     }
@@ -89,17 +111,27 @@ const ChangeTab = () => {
     <Layout style={layoutStyle}>
       <Header style={headerStyle}>
         <Row>
-          <Col span={12}>
+          <Col span={8}>
             <p
               style={{ cursor: 'pointer' }}
               onClick={() => {
-                setCurrentTab('shop')
+                navigate('/')
+                setSearchQuery('')
               }}
             >
               Shopping at ease!
             </p>
           </Col>
-          <Col span={12}>
+          <Col span={8} style={{ display: 'flex', alignItems: 'center' }}>
+            <Search
+              allowClear
+              placeholder='search for...'
+              onSearch={handleSearch}
+              enterButton
+              loading={searchLoading}
+            />
+          </Col>
+          <Col span={8}>
             <div
               style={{
                 display: 'flex',
@@ -114,7 +146,7 @@ const ChangeTab = () => {
                   icon={<ShoppingFilled style={{ color: 'white' }} />}
                   style={{ cursor: 'pointer' }}
                   onClick={() => {
-                    setCurrentTab('cart')
+                    navigate('/cart')
                   }}
                 />
               </Badge>
@@ -127,7 +159,7 @@ const ChangeTab = () => {
       </Header>
 
       <Content style={contentStyle}>
-        {renderSwitch(currentTab)}
+        {renderSwitch(tab)}
         {id && (
           <ModalDetail
             setShowDetailModal={setShowDetailModal}
