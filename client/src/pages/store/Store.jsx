@@ -101,9 +101,7 @@ const Store = ({ setSelectTab }) => {
     setSelectTab('store')
   }, [])
 
-  useEffect(() => {
-    dispatch(getProducts())
-  }, [])
+
 
   return (
     <div>

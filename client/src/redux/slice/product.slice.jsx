@@ -57,6 +57,15 @@ export const getOrders = createAsyncThunk('getOrders', async () => {
   }
 })
 
+export const updateOrder = createAsyncThunk('updateOrder', async (data, { rejectWithValue }) => {
+  try {
+    const response = await tbProductController.updateOrder(data)
+    return response.data
+  } catch (error) {
+    return rejectWithValue(error.response.data)
+  }
+})
+
 export const productSlice = createSlice({
   name: 'product',
   initialState,

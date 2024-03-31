@@ -25,6 +25,11 @@ const tbProductController = {
     const url = '/order'
     return axiosCustom.get(url)
   },
+
+  updateOrder(payload) {
+    const url = `/order/${payload.orderId}/${payload.itemId}`
+    return axiosCustom.put(url, { payload: { state: payload.state } })
+  },
 }
 
 export default tbProductController
