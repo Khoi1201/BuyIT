@@ -82,7 +82,7 @@ const Dashboard = ({ setSelectTab }) => {
       render: (_, record) => {
         return <span>{record._id.slice(-5)}</span>
       },
-      sortDirections: ['descend', 'ascend','descend'],
+      sortDirections: ['descend', 'ascend', 'descend'],
       sorter: (a, b) => {
         let numA = parseInt(a._id.match(/\d+/)[0])
         let numB = parseInt(b._id.match(/\d+/)[0])
@@ -102,12 +102,12 @@ const Dashboard = ({ setSelectTab }) => {
       render: (_, record) => {
         return <span>{getDate(record.createdAt)}</span>
       },
-      sortDirections: ['descend', 'ascend','descend'],
+      sortDirections: ['descend', 'ascend', 'descend'],
       defaultSortOrder: 'descend',
       sorter: (a, b) => {
         let dateA = new Date(a.createdAt)
         let dateB = new Date(b.createdAt)
-        return Date.parse(dateA)-Date.parse(dateB)
+        return Date.parse(dateA) - Date.parse(dateB)
       },
     },
     {
@@ -119,6 +119,25 @@ const Dashboard = ({ setSelectTab }) => {
           tag = 'PROGRESS'
         else tag = 'COMPLETE'
         return <span>{tagRender(tag)}</span>
+      },
+      sortDirections: ['descend', 'ascend'],
+      sorter: (a, b) => {
+        let tagA
+        if (a.listOfProduct.find((temp) => ['ORDER', 'DELIVER'].includes(temp.state)))
+          tagA = 'PROGRESS'
+        else tagA = 'COMPLETE'
+        let tagB
+        if (b.listOfProduct.find((temp) => ['ORDER', 'DELIVER'].includes(temp.state)))
+          tagB = 'PROGRESS'
+        else tagB = 'COMPLETE'
+
+        if (tagA === 'COMPLETE' && tagB === 'PROGRESS') {
+          return -1
+        } else if (tagA === 'PROGRESS' && tagB === 'COMPLETE') {
+          return 1
+        } else {
+          return 0
+        }
       },
     },
   ]

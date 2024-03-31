@@ -8,6 +8,7 @@ const authRouter = require('./routes/auth')
 // const userRouter = require('./routes/user')
 const productRouter = require('./routes/product')
 const orderRouter = require('./routes/order')
+const searchRouter = require('./routes/search')
 
 const connectDB = async () => {
   try {
@@ -27,6 +28,7 @@ app.use(cors())
 app.use('/api/auth', authRouter)
 app.use('/api/products', productRouter)
 app.use('/api/order', orderRouter)
+app.use('/api/search', searchRouter)
 // app.use('/api/user', userRouter)
 
 const PORT = process.env.PORT || 1203

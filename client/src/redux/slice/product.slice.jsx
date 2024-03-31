@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import tbProductController from '../api/tb.products.controller'
 
-import Cookies from 'js-cookie'
 
 export const initialState = {
   products: [],
