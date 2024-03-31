@@ -60,6 +60,7 @@ const ChangeTab = ({ tab }) => {
 
   useEffect(() => {
     dispatch(searchProducts(query))
+    !query && navigate('/')
   }, [])
 
   useEffect(() => {
