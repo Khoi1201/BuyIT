@@ -1,2 +1,2 @@
-# e-commerce-web
-This is a e-commerce web application project with both front-end and back-end
+# BuyIt Project
+Welcome to BuyIt, it's a go-to e-commerce platform. Buy and sell products effortlessly, all in one place.
