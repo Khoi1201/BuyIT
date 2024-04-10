@@ -5,7 +5,7 @@ export const axiosCustom = axios.create({
   baseURL:
     process.env.NODE_ENV !== 'production'
       ? process.env.REACT_APP_API_HOST
-      : 'https://buy-it-nine.vercel.app/',
+      : 'https://buy-ir8rgkjqg-khoi14s-projects.vercel.app/',
   headers: {
     'Content-type': 'application/json',
     'Access-Control-Allow-Origin': '*',
