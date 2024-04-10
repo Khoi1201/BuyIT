@@ -25,7 +25,7 @@ const app = express()
 app.use(express.json())
 app.use(cors())
 
-app.get('/testing', (req, res) => res.send('This is test message'))
+app.get('/', (req, res) => res.send('Express on Vercel'))
 app.use('/api/auth', authRouter)
 app.use('/api/products', productRouter)
 app.use('/api/order', orderRouter)
@@ -37,3 +37,5 @@ const PORT = process.env.PORT || 1203
 app.listen(PORT, () => {
   console.log(`Server started on port ${PORT}`)
 })
+
+module.exports = app

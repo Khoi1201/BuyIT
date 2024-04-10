@@ -3,9 +3,9 @@ import axios from 'axios'
 
 export const axiosCustom = axios.create({
   baseURL:
-    process.env.NODE_ENV === 'production'
+    process.env.NODE_ENV !== 'production'
       ? process.env.REACT_APP_API_HOST
-      : 'https://buy-it-mu.vercel.app/',
+      : 'https://buy-it-nine.vercel.app/',
   headers: {
     'Content-type': 'application/json',
     'Access-Control-Allow-Origin': '*',
