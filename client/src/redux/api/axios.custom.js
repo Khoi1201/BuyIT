@@ -3,7 +3,7 @@ import axios from 'axios'
 
 export const axiosCustom = axios.create({
   baseURL:
-    process.env.NODE_ENV === 'production'
+    process.env.NODE_ENV !== 'production'
       ? process.env.REACT_APP_API_HOST
       : 'https://buy-ir8rgkjqg-khoi14s-projects.vercel.app/',
   headers: {
