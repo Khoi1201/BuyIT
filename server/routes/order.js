@@ -32,8 +32,6 @@ router.get('/', verifyToken, async (req, res) => {
       }
     )
 
-    console.log(orders)
-
     // return intersection with order id
     res.json(orders)
   } catch (error) {
